@@ -7,7 +7,7 @@
   
   <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
-  <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
   <style>
     :root {
@@ -85,7 +85,6 @@
     .kv { display: flex; flex-direction: column; gap: 6px; }
     .kv .k { color: var(--muted); font-size: 12px; display: flex; justify-content: space-between; align-items: center; }
     
-    /* EDITABLE STYLES */
     .v { padding: 12px 16px; border-radius: 10px; background: rgba(255,255,255,0.02); border: 1px solid var(--line); font-size: 14px; white-space: pre-wrap; line-height: 1.6; transition: border-color 0.3s ease, box-shadow 0.3s ease, background 0.2s ease; }
     .editable { cursor: text; position: relative; }
     .editable:hover { background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.2); }
@@ -176,6 +175,9 @@
         }
       };
 
+      // 🛠️ FIX: Safe string splitting in case tempVal is empty
+      const rows = (tempVal || "").split('\n').length || 1;
+
       return (
         <div className={`kv ${locks[lockKey] ? 'locked' : ''}`}>
           <div className="k">
@@ -186,7 +188,7 @@
             <textarea 
               autoFocus className="v" value={tempVal} 
               onChange={(e) => setTempVal(e.target.value)} onBlur={handleBlur}
-              rows={tempVal.split('\n').length || 1}
+              rows={rows}
             />
           ) : (
             <div className="v editable" onClick={() => setIsEditing(true)} title="Click to edit! ✏️">{value}</div>
@@ -209,6 +211,8 @@
         }
       };
 
+      const rows = (tempDesc || "").split('\n').length || 1;
+
       return (
         <div className="step">
           <div className="step-hd">
@@ -219,7 +223,7 @@
             <textarea 
               autoFocus className="step-desc" value={tempDesc} 
               onChange={(e) => setTempDesc(e.target.value)} onBlur={handleBlur}
-              rows={tempDesc.split('\n').length || 1}
+              rows={rows}
             />
           ) : (
             <div className="step-desc editable" onClick={() => setIsEditing(true)} title="Click to edit! ✏️">{desc}</div>
@@ -247,13 +251,12 @@
         setTimeout(() => setToastMsg(prev => ({ ...prev, visible: false })), 2000);
       };
 
-      // Custom Edit Handlers
       const handleOverrideSave = (key, customText) => {
         setCurrentBp(prev => ({
           ...prev,
           overrides: { ...(prev.overrides || {}), [key]: customText }
         }));
-        setLocks(prev => ({ ...prev, [key]: true })); // Auto-lock!
+        setLocks(prev => ({ ...prev, [key]: true })); 
         showToast("Custom edit locked! 🔒✨");
       };
 
@@ -265,16 +268,17 @@
           ...prev,
           structure: { ...prev.structure, steps: newSteps }
         }));
-        setLocks(prev => ({ ...prev, structure: true })); // Auto-lock!
+        setLocks(prev => ({ ...prev, structure: true })); 
         showToast("Structure edit locked! 🔒✨");
       };
 
       useEffect(() => {
         try {
-          const loaded = JSON.parse(localStorage.getItem("lyricalchemy_saves_v5") || "[]");
+          const loaded = JSON.parse(localStorage.getItem("lyricalchemy_saves_v6") || "[]");
           setSaves(loaded);
         } catch (e) { console.error("Could not load saves", e); }
-        handleGenerate(true);
+        // Delaying generation slightly to ensure React is fully mounted
+        setTimeout(() => handleGenerate(true), 10);
       }, []); 
 
       const handleGenerate = (isInitial = false) => {
@@ -283,16 +287,19 @@
 
         const shouldLock = (key) => !isInitial && currentBp && locks[key];
 
-        // Clean up overrides if they were unlocked before generating
+        // 🛠️ FIX: Safe check for active overrides without optional chaining
         const activeOverrides = {};
-        if (!isInitial && currentBp?.overrides) {
+        if (!isInitial && currentBp && currentBp.overrides) {
           Object.keys(currentBp.overrides).forEach(k => {
             if (locks[k]) activeOverrides[k] = currentBp.overrides[k];
           });
         }
 
         const newBp = {
-          seed, chaos, mode: chaos <= 25 ? "Studio" : chaos <= 60 ? "Hybrid" : "Experimental", createdAt: new Date().toISOString(),
+          seed: seed, 
+          chaos: chaos, 
+          mode: chaos <= 25 ? "Studio" : chaos <= 60 ? "Hybrid" : "Experimental", 
+          createdAt: new Date().toISOString(),
           genres: shouldLock('genres') ? currentBp.genres : { primary: pick(rng, GENRES), secondary: pick(rng, GENRES) },
           topic: shouldLock('topic') ? currentBp.topic : pick(rng, TOPICS),
           emotion: shouldLock('emotion') ? currentBp.emotion : { surface: pick(rng, EMOTIONS), core: pick(rng, EMOTIONS) },
@@ -311,7 +318,7 @@
         if (!currentBp) return showToast("Generate first! 🎲");
         const newSaves = [currentBp, ...saves];
         setSaves(newSaves);
-        localStorage.setItem("lyricalchemy_saves_v5", JSON.stringify(newSaves));
+        localStorage.setItem("lyricalchemy_saves_v6", JSON.stringify(newSaves));
         showToast("Saved to Studio ✨");
       };
 
@@ -320,7 +327,13 @@
         showToast("Loaded blueprint 📥");
       };
 
-      const getVal = (key, defaultVal) => currentBp?.overrides?.[key] !== undefined ? currentBp.overrides[key] : defaultVal;
+      // 🛠️ FIX: Safe deep value retrieval without optional chaining
+      const getVal = (key, defaultVal) => {
+        if (currentBp && currentBp.overrides && currentBp.overrides[key] !== undefined) {
+          return currentBp.overrides[key];
+        }
+        return defaultVal;
+      };
 
       return (
         <div className="wrap">
@@ -330,8 +343,8 @@
               <p>Lock it, type over it, roll the rest. You have the controls.</p>
             </div>
             <div className="pillrow">
-              <div className="pill">Seed: <b>{currentBp?.seed || "—"}</b></div>
-              <div className="pill">Mode: <b>{currentBp?.mode || "—"}</b></div>
+              <div className="pill">Seed: <b>{currentBp ? currentBp.seed : "—"}</b></div>
+              <div className="pill">Mode: <b>{currentBp ? currentBp.mode : "—"}</b></div>
             </div>
           </header>
 
@@ -406,22 +419,25 @@
             <aside className="glass-panel" style={{ alignSelf: 'start' }}>
               <div className="card-hd">
                 <h2>Saved Blueprints</h2>
-                {saves.length > 0 && <button className="small danger" onClick={() => { setSaves([]); localStorage.removeItem("lyricalchemy_saves_v5"); showToast("Cleared 🗑️"); }}>Clear</button>}
+                {saves.length > 0 && <button className="small danger" onClick={() => { setSaves([]); localStorage.removeItem("lyricalchemy_saves_v6"); showToast("Cleared 🗑️"); }}>Clear</button>}
               </div>
               <div className="card-bd">
                 {saves.length === 0 ? (
                   <p style={{ color: "var(--muted)", fontSize: "14px" }}>Nothing saved yet.</p>
                 ) : (
                   <div className="saved-list">
-                    {saves.map((bp, i) => (
-                      <div key={i} className="fav">
-                        <div className="fav-title">{bp.overrides?.genres || bp.genres.primary}</div>
-                        <div className="fav-meta"><span>Seed: {bp.seed}</span></div>
-                        <div className="fav-actions">
-                          <button className="small" onClick={() => handleLoad(bp)}>📥 Load</button>
+                    {saves.map((bp, i) => {
+                      const title = (bp.overrides && bp.overrides.genres) ? bp.overrides.genres : bp.genres.primary;
+                      return (
+                        <div key={i} className="fav">
+                          <div className="fav-title">{title}</div>
+                          <div className="fav-meta"><span>Seed: {bp.seed}</span></div>
+                          <div className="fav-actions">
+                            <button className="small" onClick={() => handleLoad(bp)}>📥 Load</button>
+                          </div>
                         </div>
-                      </div>
-                    ))}
+                      )
+                    })}
                   </div>
                 )}
               </div>
