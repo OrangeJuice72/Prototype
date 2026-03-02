@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>LyricAlchemy — The Ultimate Studio Edition</title>
+  <title>LyricAlchemy — The Chaos Control Edition</title>
   
   <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
@@ -133,77 +133,29 @@
     const TOPICS = "Leaving your hometown without saying goodbye|A love that never commits but won't let go|Rebuilding your life after a public failure|A friendship fading quietly over text messages|Wanting revenge but choosing peace instead|Feeling out of place in your own childhood bedroom|Missing someone you know is terrible for you|Starting over in a city where nobody knows your name|Being addicted to the memory of how things were|Chasing a dream that’s slowly turning you bitter|Talking to your younger self in the mirror|A night drive with no destination just to avoid going home|Learning to forgive yourself for the things you broke|Falling for the wrong person at exactly the right time|A promise you made at 16 that you couldn't keep|Growing apart gracefully instead of fighting|Realizing your parents were just kids figuring it out too|The exact moment you fall out of love|Pretending you don't care when they walk into the room|Deleting their number but having it memorized|Finding their old t-shirt in your drawer and deciding to burn it|Realizing your hometown feels like a stranger|A toxic friendship you can't let go of|The terrifying freedom of finally quitting a job you hate|Watching someone else live the life you planned together|Feeling like an imposter in your own success|The paranoia of things going too well|Reconnecting with an ex only to remember why you left|Dressing up with nowhere to go just to feel alive|The guilt of moving on faster than you thought you would".split("|");
     const IMAGERY = "Neon flickering on a wet windshield|The smell of stale coffee and regret|Static on an old CRT television|Fading summer light cutting through dusty blinds|Dusty photos shoved in the back of a junk drawer|Cold air rushing into an empty, dark room|A cigarette burning down unnoticed in an ashtray|Motel curtains glowing orange at sunrise|Ocean salt drying tight on sunburned skin|Train stations echoing with missed calls and delays|Streetlights buzzing and flickering on a quiet suburban road|Snow falling silently on untouched pavement|A violently cracked phone screen glowing in the dark|Warm, yellow kitchen lamplight at 3 AM|Shattered glass glittering like diamonds on the asphalt|The heavy, oppressive humidity before a thunderstorm|A faded Polaroid curling at the edges|The distinct smell of old books and dried roses|A lone pair of sneakers dangling from a power line|The blinding glare of oncoming headlights|Mascara running down in jagged black rivers|The metallic taste of a split lip|A moth desperately battering against a porch light".split("|");
 
-    // 🔥 NEW ARRAYS FOR THE NEW FEATURES
-    const POVS = [
-      "The Direct Confession (First Person: I/You)",
-      "The Storyteller (Third Person: He/She/They)",
-      "The Unreliable Narrator (Lying to the listener/themselves)",
-      "The Inner Monologue (Talking strictly to yourself)",
-      "The Ghost (Singing from beyond the relationship or life)",
-      "The Accuser (Second Person: Dictating exactly what they did)",
-      "The Fly on the Wall (Detached, clinical, emotionless observation)"
-    ];
-
-    const CADENCES = [
-      "Fast, triplet-heavy rhythmic flow",
-      "Conversational, dragging slightly behind the beat",
-      "Long, sweeping, theatrical legato notes",
-      "Staccato, punchy, and aggressive",
-      "Slightly slurred, drunken, or exhausted delivery",
-      "Crisp, fast-paced enunciation",
-      "Breathless and rushed, like running out of time",
-      "Soulful, heavy melismatic runs",
-      "Deadpan, spoken-word style",
-      "Soft, breathy, ASMR-like close proximity"
-    ];
-
-    const TWISTS = [
-      "The beat completely drops out for the first half of verse 2",
-      "The perspective flips entirely to the villain in the bridge",
-      "Sudden tempo shift to half-time",
-      "Modulate up a minor third for the final massive chorus",
-      "A stark acoustic breakdown right after the climax",
-      "The final hook is whispered instead of belted",
-      "A massive, unexpected genre switch for the bridge",
-      "The lyrics suddenly break the fourth wall and speak to the audience",
-      "Introduce a completely new melody and chord progression in the outro",
-      "The chorus lyrics completely change meaning the final time they are sung",
-      "All instruments drop out leaving a 4-part acappella harmony",
-      "A screeching, dissonant synth/guitar solo interrupts a soft moment"
-    ];
-
+    const POVS = ["The Direct Confession (First Person: I/You)", "The Storyteller (Third Person: He/She/They)", "The Unreliable Narrator (Lying to the listener/themselves)", "The Inner Monologue (Talking strictly to yourself)", "The Ghost (Singing from beyond the relationship or life)", "The Accuser (Second Person: Dictating exactly what they did)", "The Fly on the Wall (Detached, clinical, emotionless observation)"];
+    const CADENCES = ["Fast, triplet-heavy rhythmic flow", "Conversational, dragging slightly behind the beat", "Long, sweeping, theatrical legato notes", "Staccato, punchy, and aggressive", "Slightly slurred, drunken, or exhausted delivery", "Crisp, fast-paced enunciation", "Breathless and rushed, like running out of time", "Soulful, heavy melismatic runs", "Deadpan, spoken-word style", "Soft, breathy, ASMR-like close proximity"];
+    const TWISTS = ["The beat completely drops out for the first half of verse 2", "The perspective flips entirely to the villain in the bridge", "Sudden tempo shift to half-time", "Modulate up a minor third for the final massive chorus", "A stark acoustic breakdown right after the climax", "The final hook is whispered instead of belted", "A massive, unexpected genre switch for the bridge", "The lyrics suddenly break the fourth wall and speak to the audience", "Introduce a completely new melody and chord progression in the outro", "The chorus lyrics completely change meaning the final time they are sung", "All instruments drop out leaving a 4-part acappella harmony", "A screeching, dissonant synth/guitar solo interrupts a soft moment"];
     const EMOTIONS = ["Nostalgia", "Hope", "Resentment", "Longing", "Confidence", "Guilt", "Yearning", "Relief", "Regret", "Defiance", "Tenderness", "Jealousy", "Awe", "Grief", "Calm", "Restlessness"];
     const RHYME = ["Simple end rhymes, conversational diction", "Slant rhymes, modern phrasing, internal echoes", "Sparse rhymes, vivid imagery, punchy lines", "Dense internal rhymes, rhythmic wordplay", "No-rhyme free verse but with strong cadence", "Call-and-response phrasing, hook-forward repetition"];
-    const VOCAL_ARCHETYPES = [
-      { name:"The Confessor", verse:"close-mic, intimate, restrained", chorus:"open tone, warm lift", bridge:"nearly spoken, vulnerable" },
-      { name:"The Rebel", verse:"gritty, forward, rhythmic phrasing", chorus:"bigger edge, punch consonants", bridge:"half-sung grit, tension" },
-      { name:"The Dreamer", verse:"airy, soft, floating vowels", chorus:"soaring, layered harmonies", bridge:"breathy clarity, emotional crack" },
-      { name:"The Villain", verse:"low and controlled, theatrical", chorus:"dramatic lift, sharp dynamics", bridge:"cold whisper → sudden snap" },
-      { name:"The Storyteller", verse:"clear articulation, narrative drive", chorus:"anthemic, singalong", bridge:"pause-heavy, honest delivery" }
-    ];
-    
-    const STRUCTURES = [
-      { name: "Modern Pop Arc", steps: [["Verse 1", "Scene setting", "Concrete details, one strong image per line."], ["Pre-Chorus", "Tension climb", "Shorten lines, raise urgency, hint the thesis."], ["Chorus", "Thesis + hook", "One clear statement, repeatable phrasing."], ["Verse 2", "Contrast / escalation", "Add a twist, reveal imbalance or regret."], ["Pre-Chorus", "Higher stakes", "Same shape, sharper confession."], ["Chorus", "Bigger payoff", "Add one new line at the end for lift."], ["Bridge", "Perspective flip", "Say one plain truth with no metaphor."], ["Final Chorus", "Expanded hook", "Stack harmonies, extend the last phrase."]] },
-      { name: "Alt / Indie Narrative", steps: [["Verse 1", "Place + moment", "Anchor in time/location. Let details do the work."], ["Chorus", "Emotional summary", "Not too literal—one memorable phrase."], ["Verse 2", "Memory replay", "Show the same event from a new angle."], ["Chorus", "Reframe", "Same hook, changed meaning with one new word."], ["Bridge", "Confession", "Drop the ‘cool’—be embarrassingly honest once."], ["Final Chorus", "Resolution", "Either acceptance or refusal. No in-between."]] },
-      { name: "Rap / R&B Switch-Up", steps: [["Intro", "Tone-set", "One-liner that defines the vibe."], ["Verse", "Detail + flex", "Specifics, clever images, internal rhyme pockets."], ["Hook", "Sticky mantra", "Short, repeatable, emotionally loaded."], ["Verse 2", "Escalate / reveal", "Add vulnerability or a contradiction."], ["Bridge", "Melodic lift", "Stretch vowels, simplify language, let it breathe."], ["Final Hook", "Harder", "Double the cadence or add ad-libs."]] },
-      { name: "The Classic AABA (Jazz/Showtune)", steps: [["Section A1", "Introduce theme", "Establish the core melody and lyrical premise quickly."], ["Section A2", "Reinforce theme", "Same melody, advance the plot or change the setting."], ["Section B (Bridge)", "The Turn", "Completely different chords/melody. Shift perspective or time."], ["Section A3", "Resolution", "Return to the familiar melody, concluding the emotional thought."]] },
-      { name: "EDM Build & Drop", steps: [["Intro", "Atmosphere", "Sparse instrumentation, whispered or highly affected vocal."], ["Verse", "Building energy", "Rhythm speeds up, lyrics become more frantic or urgent."], ["Pre-Drop Build", "Maximum Tension", "Rising pitch, repeating a single powerful phrase over and over."], ["The Drop", "Release", "Minimal to no vocals. Let the production carry the emotion."], ["Outro", "Fade out", "Return to the sparse intro atmosphere, echoing the final word."]] }
-    ];
+    const VOCAL_ARCHETYPES = [{ name:"The Confessor", verse:"close-mic, intimate, restrained", chorus:"open tone, warm lift", bridge:"nearly spoken, vulnerable" }, { name:"The Rebel", verse:"gritty, forward, rhythmic phrasing", chorus:"bigger edge, punch consonants", bridge:"half-sung grit, tension" }, { name:"The Dreamer", verse:"airy, soft, floating vowels", chorus:"soaring, layered harmonies", bridge:"breathy clarity, emotional crack" }, { name:"The Villain", verse:"low and controlled, theatrical", chorus:"dramatic lift, sharp dynamics", bridge:"cold whisper → sudden snap" }, { name:"The Storyteller", verse:"clear articulation, narrative drive", chorus:"anthemic, singalong", bridge:"pause-heavy, honest delivery" }];
+    const STRUCTURES = [{ name: "Modern Pop Arc", steps: [["Verse 1", "Scene setting", "Concrete details, one strong image per line."], ["Pre-Chorus", "Tension climb", "Shorten lines, raise urgency, hint the thesis."], ["Chorus", "Thesis + hook", "One clear statement, repeatable phrasing."], ["Verse 2", "Contrast / escalation", "Add a twist, reveal imbalance or regret."], ["Pre-Chorus", "Higher stakes", "Same shape, sharper confession."], ["Chorus", "Bigger payoff", "Add one new line at the end for lift."], ["Bridge", "Perspective flip", "Say one plain truth with no metaphor."], ["Final Chorus", "Expanded hook", "Stack harmonies, extend the last phrase."]] }, { name: "Alt / Indie Narrative", steps: [["Verse 1", "Place + moment", "Anchor in time/location. Let details do the work."], ["Chorus", "Emotional summary", "Not too literal—one memorable phrase."], ["Verse 2", "Memory replay", "Show the same event from a new angle."], ["Chorus", "Reframe", "Same hook, changed meaning with one new word."], ["Bridge", "Confession", "Drop the ‘cool’—be embarrassingly honest once."], ["Final Chorus", "Resolution", "Either acceptance or refusal. No in-between."]] }, { name: "Rap / R&B Switch-Up", steps: [["Intro", "Tone-set", "One-liner that defines the vibe."], ["Verse", "Detail + flex", "Specifics, clever images, internal rhyme pockets."], ["Hook", "Sticky mantra", "Short, repeatable, emotionally loaded."], ["Verse 2", "Escalate / reveal", "Add vulnerability or a contradiction."], ["Bridge", "Melodic lift", "Stretch vowels, simplify language, let it breathe."], ["Final Hook", "Harder", "Double the cadence or add ad-libs."]] }, { name: "The Classic AABA (Jazz/Showtune)", steps: [["Section A1", "Introduce theme", "Establish the core melody and lyrical premise quickly."], ["Section A2", "Reinforce theme", "Same melody, advance the plot or change the setting."], ["Section B (Bridge)", "The Turn", "Completely different chords/melody. Shift perspective or time."], ["Section A3", "Resolution", "Return to the familiar melody, concluding the emotional thought."]] }, { name: "EDM Build & Drop", steps: [["Intro", "Atmosphere", "Sparse instrumentation, whispered or highly affected vocal."], ["Verse", "Building energy", "Rhythm speeds up, lyrics become frantic or urgent."], ["Pre-Drop Build", "Maximum Tension", "Rising pitch, repeating a single powerful phrase over and over."], ["The Drop", "Release", "Minimal to no vocals. Let the production carry the emotion."], ["Outro", "Fade out", "Return to the sparse intro atmosphere, echoing the final word."]] }];
 
     function xmur3(str) { let h = 1779033703 ^ str.length; for (let i = 0; i < str.length; i++) { h = Math.imul(h ^ str.charCodeAt(i), 3432918353); h = (h << 13) | (h >>> 19); } return function() { h = Math.imul(h ^ (h >>> 16), 2246822507); h = Math.imul(h ^ (h >>> 13), 3266489909); return (h ^= h >>> 16) >>> 0; }; }
     function mulberry32(a) { return function() { let t = a += 0x6D2B79F5; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
     function makeRng(seedStr){ const seed = seedStr && seedStr.trim() ? seedStr.trim() : String(Date.now()); const a = xmur3(seed)(); return { seed, rand: mulberry32(a) }; }
     function pick(rng, arr){ return arr[Math.floor(rng.rand() * arr.length)]; }
 
-    // 🔥 Music Engine Generator
-    function generateMusic(rng) {
-      const bpm = Math.floor(rng.rand() * (175 - 60 + 1) + 60);
+    // 🔥 Music Engine Generator using Chaos Math!
+    function generateMusic(rng, chaos) {
+      // High chaos = 100% chance for wild music. Low chaos = extremely unlikely.
+      const isWild = (rng.rand() * 100) < chaos;
+      const bpm = isWild ? Math.floor(rng.rand() * (175 - 60 + 1) + 60) : Math.floor(rng.rand() * (128 - 90 + 1) + 90);
       const keys = ["C", "C#", "D", "Eb", "E", "F", "F#", "G", "G#", "A", "Bb", "B"];
-      const scales = ["Major", "Minor", "Dorian", "Mixolydian", "Harmonic Minor", "Phrygian", "Lydian"];
+      const scales = isWild ? ["Major", "Minor", "Dorian", "Mixolydian", "Harmonic Minor", "Phrygian", "Lydian"] : ["Major", "Minor"];
       return `${bpm} BPM | Key: ${pick(rng, keys)} ${pick(rng, scales)}`;
     }
 
-    // --- COMPONENTS ---
     const LockButton = ({ isLocked, onToggle }) => (
       <button className={`lock-btn ${isLocked ? 'active' : ''}`} onClick={onToggle} title={isLocked ? "Unlock" : "Lock"}>
         {isLocked ? '🔒' : '🔓'}
@@ -286,7 +238,6 @@
       const [saves, setSaves] = useState([]);
       const [toastMsg, setToastMsg] = useState({ text: "", visible: false });
 
-      // 🔥 Added new locks for POV, Twist, and Cadence
       const [locks, setLocks] = useState({
         genres: false, music: false, topic: false, emotion: false, pov: false,
         imagery: false, rhyme: false, vocal: false, cadence: false, 
@@ -323,7 +274,7 @@
 
       useEffect(() => {
         try {
-          const loaded = JSON.parse(localStorage.getItem("lyricalchemy_saves_v8") || "[]");
+          const loaded = JSON.parse(localStorage.getItem("lyricalchemy_saves_v9") || "[]");
           setSaves(loaded);
         } catch (e) { console.error("Could not load saves", e); }
         setTimeout(() => handleGenerate(true), 10);
@@ -342,17 +293,35 @@
           });
         }
 
+        // 🔥 THE CHAOS MATH IS BACK
+        // If rng drops a number HIGHER than your chaos slider, it acts Cohesive/Tamed.
+        const isCohesive = (rng.rand() * 100) > chaos; 
+
+        // 1. Cohesive Genres (Pulling from the standard 30 instead of the 700 if tamed)
+        const safeGenres = GENRES.slice(0, 30); 
+        let primaryGenre = isCohesive ? pick(rng, safeGenres) : pick(rng, GENRES);
+        let secondaryGenre = isCohesive ? pick(rng, safeGenres) : pick(rng, GENRES);
+        if (primaryGenre === secondaryGenre) secondaryGenre = pick(rng, GENRES);
+
+        // 2. Cohesive Emotions
+        const curatedEmotionPairs = [["Confidence","Insecurity"],["Nostalgia","Resentment"],["Hope","Fear"],["Relief","Grief"],["Tenderness","Jealousy"],["Calm","Restlessness"],["Defiance","Guilt"],["Longing","Regret"]];
+        let chosenEmotion = { surface: pick(rng, EMOTIONS), core: pick(rng, EMOTIONS) };
+        if (isCohesive) {
+            const pair = pick(rng, curatedEmotionPairs);
+            chosenEmotion = { surface: pair[0], core: pair[1] };
+        }
+
         const newBp = {
           seed: seed, 
           chaos: chaos, 
           mode: chaos <= 25 ? "Studio" : chaos <= 60 ? "Hybrid" : "Experimental", 
           createdAt: new Date().toISOString(),
-          genres: shouldLock('genres') ? currentBp.genres : { primary: pick(rng, GENRES), secondary: pick(rng, GENRES) },
-          music: shouldLock('music') ? currentBp.music : generateMusic(rng),
+          genres: shouldLock('genres') ? currentBp.genres : { primary: primaryGenre, secondary: secondaryGenre },
+          music: shouldLock('music') ? currentBp.music : generateMusic(rng, chaos),
           
           topic: shouldLock('topic') ? currentBp.topic : pick(rng, TOPICS),
           pov: shouldLock('pov') ? currentBp.pov : pick(rng, POVS),
-          emotion: shouldLock('emotion') ? currentBp.emotion : { surface: pick(rng, EMOTIONS), core: pick(rng, EMOTIONS) },
+          emotion: shouldLock('emotion') ? currentBp.emotion : chosenEmotion,
           imagery: shouldLock('imagery') ? currentBp.imagery : pick(rng, IMAGERY),
           
           rhyme: shouldLock('rhyme') ? currentBp.rhyme : pick(rng, RHYME),
@@ -372,13 +341,26 @@
         if (!currentBp) return showToast("Generate first! 🎲");
         const newSaves = [currentBp, ...saves];
         setSaves(newSaves);
-        localStorage.setItem("lyricalchemy_saves_v8", JSON.stringify(newSaves));
+        localStorage.setItem("lyricalchemy_saves_v9", JSON.stringify(newSaves));
         showToast("Saved to Studio ✨");
       };
 
       const handleLoad = (bp) => {
         setCurrentBp(bp); setSeedInput(bp.seed); setChaos(bp.chaos);
         showToast("Loaded blueprint 📥");
+      };
+
+      // 🛠️ FIX: Re-wired the Export JSON button here!
+      const handleExport = () => {
+        if (!currentBp) return showToast("Generate first! 🎲");
+        const blob = new Blob([JSON.stringify(currentBp, null, 2)], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `LyricAlchemy_${currentBp.seed}.json`;
+        a.click();
+        URL.revokeObjectURL(url);
+        showToast("Exported JSON 📤");
       };
 
       const getVal = (key, defaultVal) => {
@@ -393,7 +375,7 @@
           <header>
             <div className="brand">
               <h1>LyricAlchemy ✨</h1>
-              <p>The Ultimate Engine. POVs, Music Theory, and Wildcard Plot Twists loaded.</p>
+              <p>The Ultimate Engine. Chaos Dial is fully operational.</p>
             </div>
             <div className="pillrow">
               <div className="pill">Seed: <b>{currentBp ? currentBp.seed : "—"}</b></div>
@@ -408,6 +390,8 @@
                 <div className="row">
                   <button className="primary" onClick={() => handleGenerate(false)}>🎲 Generate</button>
                   <button className="small" onClick={handleSave}>💾 Save</button>
+                  {/* 🛠️ RESTORED: Export Button! */}
+                  <button className="small" onClick={handleExport}>📤 Export JSON</button>
                 </div>
               </div>
               
@@ -478,7 +462,7 @@
             <aside className="glass-panel" style={{ alignSelf: 'start' }}>
               <div className="card-hd">
                 <h2>Saved Blueprints</h2>
-                {saves.length > 0 && <button className="small danger" onClick={() => { setSaves([]); localStorage.removeItem("lyricalchemy_saves_v8"); showToast("Cleared 🗑️"); }}>Clear</button>}
+                {saves.length > 0 && <button className="small danger" onClick={() => { setSaves([]); localStorage.removeItem("lyricalchemy_saves_v9"); showToast("Cleared 🗑️"); }}>Clear</button>}
               </div>
               <div className="card-bd">
                 {saves.length === 0 ? (
