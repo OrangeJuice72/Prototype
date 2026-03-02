@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>LyricAlchemy — The Chaos Control Edition</title>
+  <title>LyricAlchemy — Final Boss Edition</title>
   
   <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
@@ -119,6 +119,8 @@
 
     .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(20px); background: rgba(20, 22, 33, 0.9); border: 1px solid var(--accent-purple); border-radius: 999px; padding: 12px 24px; box-shadow: 0 10px 30px rgba(179,140,255,0.2); color: var(--text); font-size: 14px; font-weight: 600; opacity: 0; pointer-events: none; transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.16, 1, 0.3, 1); z-index: 1000; }
     .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+    
+    .danger-text { color: var(--danger); font-weight: 600; }
   </style>
 </head>
 <body>
@@ -139,16 +141,59 @@
     const EMOTIONS = ["Nostalgia", "Hope", "Resentment", "Longing", "Confidence", "Guilt", "Yearning", "Relief", "Regret", "Defiance", "Tenderness", "Jealousy", "Awe", "Grief", "Calm", "Restlessness"];
     const RHYME = ["Simple end rhymes, conversational diction", "Slant rhymes, modern phrasing, internal echoes", "Sparse rhymes, vivid imagery, punchy lines", "Dense internal rhymes, rhythmic wordplay", "No-rhyme free verse but with strong cadence", "Call-and-response phrasing, hook-forward repetition"];
     const VOCAL_ARCHETYPES = [{ name:"The Confessor", verse:"close-mic, intimate, restrained", chorus:"open tone, warm lift", bridge:"nearly spoken, vulnerable" }, { name:"The Rebel", verse:"gritty, forward, rhythmic phrasing", chorus:"bigger edge, punch consonants", bridge:"half-sung grit, tension" }, { name:"The Dreamer", verse:"airy, soft, floating vowels", chorus:"soaring, layered harmonies", bridge:"breathy clarity, emotional crack" }, { name:"The Villain", verse:"low and controlled, theatrical", chorus:"dramatic lift, sharp dynamics", bridge:"cold whisper → sudden snap" }, { name:"The Storyteller", verse:"clear articulation, narrative drive", chorus:"anthemic, singalong", bridge:"pause-heavy, honest delivery" }];
-    const STRUCTURES = [{ name: "Modern Pop Arc", steps: [["Verse 1", "Scene setting", "Concrete details, one strong image per line."], ["Pre-Chorus", "Tension climb", "Shorten lines, raise urgency, hint the thesis."], ["Chorus", "Thesis + hook", "One clear statement, repeatable phrasing."], ["Verse 2", "Contrast / escalation", "Add a twist, reveal imbalance or regret."], ["Pre-Chorus", "Higher stakes", "Same shape, sharper confession."], ["Chorus", "Bigger payoff", "Add one new line at the end for lift."], ["Bridge", "Perspective flip", "Say one plain truth with no metaphor."], ["Final Chorus", "Expanded hook", "Stack harmonies, extend the last phrase."]] }, { name: "Alt / Indie Narrative", steps: [["Verse 1", "Place + moment", "Anchor in time/location. Let details do the work."], ["Chorus", "Emotional summary", "Not too literal—one memorable phrase."], ["Verse 2", "Memory replay", "Show the same event from a new angle."], ["Chorus", "Reframe", "Same hook, changed meaning with one new word."], ["Bridge", "Confession", "Drop the ‘cool’—be embarrassingly honest once."], ["Final Chorus", "Resolution", "Either acceptance or refusal. No in-between."]] }, { name: "Rap / R&B Switch-Up", steps: [["Intro", "Tone-set", "One-liner that defines the vibe."], ["Verse", "Detail + flex", "Specifics, clever images, internal rhyme pockets."], ["Hook", "Sticky mantra", "Short, repeatable, emotionally loaded."], ["Verse 2", "Escalate / reveal", "Add vulnerability or a contradiction."], ["Bridge", "Melodic lift", "Stretch vowels, simplify language, let it breathe."], ["Final Hook", "Harder", "Double the cadence or add ad-libs."]] }, { name: "The Classic AABA (Jazz/Showtune)", steps: [["Section A1", "Introduce theme", "Establish the core melody and lyrical premise quickly."], ["Section A2", "Reinforce theme", "Same melody, advance the plot or change the setting."], ["Section B (Bridge)", "The Turn", "Completely different chords/melody. Shift perspective or time."], ["Section A3", "Resolution", "Return to the familiar melody, concluding the emotional thought."]] }, { name: "EDM Build & Drop", steps: [["Intro", "Atmosphere", "Sparse instrumentation, whispered or highly affected vocal."], ["Verse", "Building energy", "Rhythm speeds up, lyrics become frantic or urgent."], ["Pre-Drop Build", "Maximum Tension", "Rising pitch, repeating a single powerful phrase over and over."], ["The Drop", "Release", "Minimal to no vocals. Let the production carry the emotion."], ["Outro", "Fade out", "Return to the sparse intro atmosphere, echoing the final word."]] }];
+    
+    // 🔥 THE 12 EPIC STRUCTURES RESTORED!
+    const STRUCTURES = [
+      { name: "Modern Pop Arc", steps: [["Verse 1", "Scene setting", "Concrete details, one strong image per line."], ["Pre-Chorus", "Tension climb", "Shorten lines, raise urgency, hint the thesis."], ["Chorus", "Thesis + hook", "One clear statement, repeatable phrasing."], ["Verse 2", "Contrast / escalation", "Add a twist, reveal imbalance or regret."], ["Pre-Chorus", "Higher stakes", "Same shape, sharper confession."], ["Chorus", "Bigger payoff", "Add one new line at the end for lift."], ["Bridge", "Perspective flip", "Say one plain truth with no metaphor."], ["Final Chorus", "Expanded hook", "Stack harmonies, extend the last phrase."]] },
+      { name: "Alt / Indie Narrative", steps: [["Verse 1", "Place + moment", "Anchor in time/location. Let details do the work."], ["Chorus", "Emotional summary", "Not too literal—one memorable phrase."], ["Verse 2", "Memory replay", "Show the same event from a new angle."], ["Chorus", "Reframe", "Same hook, changed meaning with one new word."], ["Bridge", "Confession", "Drop the ‘cool’—be embarrassingly honest once."], ["Final Chorus", "Resolution", "Either acceptance or refusal. No in-between."]] },
+      { name: "Rap / R&B Switch-Up", steps: [["Intro", "Tone-set", "One-liner that defines the vibe."], ["Verse", "Detail + flex", "Specifics, clever images, internal rhyme pockets."], ["Hook", "Sticky mantra", "Short, repeatable, emotionally loaded."], ["Verse 2", "Escalate / reveal", "Add vulnerability or a contradiction."], ["Bridge", "Melodic lift", "Stretch vowels, simplify language, let it breathe."], ["Final Hook", "Harder", "Double the cadence or add ad-libs."]] },
+      { name: "The Classic AABA (Jazz/Showtune)", steps: [["Section A1", "Introduce theme", "Establish the core melody and lyrical premise quickly."], ["Section A2", "Reinforce theme", "Same melody, advance the plot or change the setting."], ["Section B (Bridge)", "The Turn", "Completely different chords/melody. Shift perspective or time."], ["Section A3", "Resolution", "Return to the familiar melody, concluding the emotional thought."]] },
+      { name: "EDM Build & Drop", steps: [["Intro", "Atmosphere", "Sparse instrumentation, whispered or highly affected vocal."], ["Verse", "Building energy", "Rhythm speeds up, lyrics become more frantic or urgent."], ["Pre-Drop Build", "Maximum Tension", "Rising pitch, repeating a single powerful phrase over and over."], ["The Drop", "Release", "Minimal to no vocals. Let the production carry the emotion."], ["Outro", "Fade out", "Return to the sparse intro atmosphere, echoing the final word."]] },
+      { name: "Folk Ballad Storyteller", steps: [["Verse 1", "The Setup", "Introduce characters and the core conflict."], ["Chorus", "The Moral", "A timeless, folksy observation about the situation."], ["Verse 2", "The Complication", "Things go wrong. Add a tragic or ironic twist."], ["Chorus", "The Moral Returns", "The same words now carry heavier meaning."], ["Verse 3", "The Aftermath", "Years later, or the final consequence."], ["Outro", "Drifting off", "A single acoustic instrument fading into the wind."]] },
+      { name: "Punk / Hardcore Blitz", steps: [["Intro", "Count off", "Fast, aggressive start. No time to think."], ["Verse 1", "The Grievance", "Shouted vocals, fast tempo, angry observation."], ["Chorus", "The Anthem", "Chanted group vocals, rebellious punchline."], ["Verse 2", "The Escalation", "Shorter than verse 1, double the intensity."], ["Breakdown", "Half-time crush", "Tempo drops by half, extremely heavy, guttural vocal delivery."], ["Outro", "Abrupt stop", "Feedback ring-out. Leave them wanting more."]] },
+      { name: "K-Pop Rollercoaster", steps: [["Intro", "Catchy Signature", "A distinct sound or spoken phrase to brand the song."], ["Verse 1", "Smooth & Sweet", "Clean vocals, setting a confident mood."], ["Rap Verse", "Attitude Shift", "Sudden tempo/beat change, fast rhythmic delivery."], ["Pre-Chorus", "Vocal Flex", "Soaring high notes building immense anticipation."], ["Chorus", "The Ultimate Hook", "Explosive energy, massive synth lines, repetitive sticky phrase."], ["Post-Chorus", "Dance Break", "Heavy beat, single chanted word or non-lexical vocables."], ["Bridge", "Emotional drop", "Stripped back, vulnerable, leading to a massive high note."], ["Final Chorus", "Everything at once", "All layers combined, ad-libs flying everywhere."]] },
+      { name: "Prog Rock Epic", steps: [["Part I: Overture", "Instrumental", "Complex time signature introducing the musical themes."], ["Part II: The Call", "First vocals", "Abstract lyrics dealing with cosmic or philosophical themes."], ["Part III: The Journey", "Shifting sands", "Tempo changes, multiple different verses with no repeated chorus."], ["Part IV: The Battle", "Solo Section", "Dueling instruments, maximum complexity and tension."], ["Part V: Resolution", "Grand finale", "A massive, sweeping chorus that unites all previous themes."]] },
+      { name: "The Slow Burn Arc", steps: [["Intro", "Silence & Space", "Barely there instrumentation, intimate hushed vocal."], ["Verse 1", "Whispered truths", "Short lines, lots of empty space between phrases."], ["Verse 2", "Layering", "Drums enter softly, vocals gain a bit of confidence."], ["Bridge", "The simmer", "Repeating a mantra as instruments slowly swell in volume."], ["The Climax", "Wall of Sound", "Screamed or belted vocals, explosive drums, overwhelming emotion."], ["Outro", "Sudden cut", "Instantly drops back to total silence or a single held note."]] },
+      { name: "Neo-Soul Groove", steps: [["Intro", "Vibe Check", "Complex chord progression, spoken word intro."], ["Verse 1", "Conversational", "Laid back delivery, floating slightly behind the beat."], ["Chorus", "Harmonic bliss", "Thick vocal stacks, smooth and jazzy."], ["Verse 2", "Playful", "More ad-libs, interactive interplay between vocal and bassline."], ["Vamp / Outro", "The Jam", "Repeating the chorus progression while the vocalist improvises runs and scat-sings to fade."]] },
+      { name: "The Two-Part Suite (Beat Switch)", steps: [["Part 1: Verse", "Aggressive", "Fast tempo, attacking the beat, confrontational lyrics."], ["Part 1: Hook", "Hype", "Short, sharp, repetitive."], ["The Switch", "Transition", "Record scratch, beat suddenly slows down and gets moody/ambient."], ["Part 2: Verse", "Introspective", "Slower flow, vulnerable lyrics, looking inward."], ["Part 2: Outro", "Spoken Word", "A philosophical or reflective spoken outro over fading chords."]] }
+    ];
+
+    // 🔥 NEW CONTENT ARRAYS!
+    const FORBIDDEN_WORDS = ["Love", "Heart", "Baby", "Cry", "Tonight", "Girl", "Boy", "Tears", "Soul", "Forever", "Always", "Never", "Fire", "Desire", "Crazy", "Pain", "Rain", "Stay", "Leave", "Smile", "Eyes", "Time", "World", "Dream", "Light", "Dark", "Hold", "Beautiful"];
+    
+    const INSTRUMENTS = [
+      "Fuzzy analog synths, tight 808s, and a heavily distorted vocal sample",
+      "Nylon string acoustic, brush drums, and a sweeping cello",
+      "Clean stratocaster, roomy live drums, and vintage Rhodes keys",
+      "Mellotron flutes, rolling tom grooves, and a picked bass",
+      "Spacious grand piano, ambient swells, and minimal percussion",
+      "Saturated drum breaks, deep sub-bass, and chopped vocal samples",
+      "Down-tuned chugging guitars, double kick drums, and a roaring bass tone",
+      "Lo-fi sampled jazz chords, dusty vinyl crackle, and a laid-back boom-bap beat",
+      "Pulsing arpeggiators, four-on-the-floor kick, and wide supersaws",
+      "A lone electric guitar drenched in cavernous reverb",
+      "Upright bass, jazz brushes on a snare, and a muted trumpet",
+      "Glistening glockenspiel, acoustic strumming, and a warm Mellotron string section"
+    ];
+
+    const TITLE_PREFIXES = ["Neon", "Dust", "Static", "Velvet", "Midnight", "Broken", "Fading", "Golden", "Hollow", "Silent", "Crimson", "Electric", "Bitter", "Sweet", "Glass", "Smoke", "Echoes of"];
 
     function xmur3(str) { let h = 1779033703 ^ str.length; for (let i = 0; i < str.length; i++) { h = Math.imul(h ^ str.charCodeAt(i), 3432918353); h = (h << 13) | (h >>> 19); } return function() { h = Math.imul(h ^ (h >>> 16), 2246822507); h = Math.imul(h ^ (h >>> 13), 3266489909); return (h ^= h >>> 16) >>> 0; }; }
     function mulberry32(a) { return function() { let t = a += 0x6D2B79F5; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
     function makeRng(seedStr){ const seed = seedStr && seedStr.trim() ? seedStr.trim() : String(Date.now()); const a = xmur3(seed)(); return { seed, rand: mulberry32(a) }; }
     function pick(rng, arr){ return arr[Math.floor(rng.rand() * arr.length)]; }
 
-    // 🔥 Music Engine Generator using Chaos Math!
+    // Seeded shuffle function to pick multiple unique items (like Forbidden Words)
+    function pickN(rng, arr, n) {
+      const copy = [...arr];
+      for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(rng.rand() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+      return copy.slice(0, n);
+    }
+
     function generateMusic(rng, chaos) {
-      // High chaos = 100% chance for wild music. Low chaos = extremely unlikely.
       const isWild = (rng.rand() * 100) < chaos;
       const bpm = isWild ? Math.floor(rng.rand() * (175 - 60 + 1) + 60) : Math.floor(rng.rand() * (128 - 90 + 1) + 90);
       const keys = ["C", "C#", "D", "Eb", "E", "F", "F#", "G", "G#", "A", "Bb", "B"];
@@ -162,7 +207,7 @@
       </button>
     );
 
-    const EditableKeyValue = ({ label, value, lockKey, locks, toggleLock, onEditSave }) => {
+    const EditableKeyValue = ({ label, value, lockKey, locks, toggleLock, onEditSave, danger }) => {
       const [isEditing, setIsEditing] = useState(false);
       const [tempVal, setTempVal] = useState(value);
 
@@ -190,7 +235,7 @@
               rows={rows}
             />
           ) : (
-            <div className="v editable" onClick={() => setIsEditing(true)} title="Click to edit! ✏️">{value}</div>
+            <div className={`v editable ${danger ? 'danger-text' : ''}`} onClick={() => setIsEditing(true)} title="Click to edit! ✏️">{value}</div>
           )}
         </div>
       );
@@ -238,9 +283,11 @@
       const [saves, setSaves] = useState([]);
       const [toastMsg, setToastMsg] = useState({ text: "", visible: false });
 
+      // 🔥 Added new locks for Title, Instrumentation, and Forbidden Words!
       const [locks, setLocks] = useState({
-        genres: false, music: false, topic: false, emotion: false, pov: false,
-        imagery: false, rhyme: false, vocal: false, cadence: false, 
+        title: false, genres: false, music: false, instrumentation: false, 
+        topic: false, emotion: false, pov: false, imagery: false, 
+        rhyme: false, vocal: false, cadence: false, forbidden: false,
         structure: false, twist: false
       });
 
@@ -274,7 +321,7 @@
 
       useEffect(() => {
         try {
-          const loaded = JSON.parse(localStorage.getItem("lyricalchemy_saves_v9") || "[]");
+          const loaded = JSON.parse(localStorage.getItem("lyricalchemy_saves_v10") || "[]");
           setSaves(loaded);
         } catch (e) { console.error("Could not load saves", e); }
         setTimeout(() => handleGenerate(true), 10);
@@ -293,17 +340,13 @@
           });
         }
 
-        // 🔥 THE CHAOS MATH IS BACK
-        // If rng drops a number HIGHER than your chaos slider, it acts Cohesive/Tamed.
         const isCohesive = (rng.rand() * 100) > chaos; 
 
-        // 1. Cohesive Genres (Pulling from the standard 30 instead of the 700 if tamed)
         const safeGenres = GENRES.slice(0, 30); 
         let primaryGenre = isCohesive ? pick(rng, safeGenres) : pick(rng, GENRES);
         let secondaryGenre = isCohesive ? pick(rng, safeGenres) : pick(rng, GENRES);
         if (primaryGenre === secondaryGenre) secondaryGenre = pick(rng, GENRES);
 
-        // 2. Cohesive Emotions
         const curatedEmotionPairs = [["Confidence","Insecurity"],["Nostalgia","Resentment"],["Hope","Fear"],["Relief","Grief"],["Tenderness","Jealousy"],["Calm","Restlessness"],["Defiance","Guilt"],["Longing","Regret"]];
         let chosenEmotion = { surface: pick(rng, EMOTIONS), core: pick(rng, EMOTIONS) };
         if (isCohesive) {
@@ -316,8 +359,11 @@
           chaos: chaos, 
           mode: chaos <= 25 ? "Studio" : chaos <= 60 ? "Hybrid" : "Experimental", 
           createdAt: new Date().toISOString(),
+          
+          title: shouldLock('title') ? currentBp.title : `Project: ${pick(rng, TITLE_PREFIXES)} ${isCohesive ? chosenEmotion.core : pick(rng, EMOTIONS)}`,
           genres: shouldLock('genres') ? currentBp.genres : { primary: primaryGenre, secondary: secondaryGenre },
           music: shouldLock('music') ? currentBp.music : generateMusic(rng, chaos),
+          instrumentation: shouldLock('instrumentation') ? currentBp.instrumentation : pick(rng, INSTRUMENTS),
           
           topic: shouldLock('topic') ? currentBp.topic : pick(rng, TOPICS),
           pov: shouldLock('pov') ? currentBp.pov : pick(rng, POVS),
@@ -327,6 +373,7 @@
           rhyme: shouldLock('rhyme') ? currentBp.rhyme : pick(rng, RHYME),
           vocal: shouldLock('vocal') ? currentBp.vocal : pick(rng, VOCAL_ARCHETYPES),
           cadence: shouldLock('cadence') ? currentBp.cadence : pick(rng, CADENCES),
+          forbidden: shouldLock('forbidden') ? currentBp.forbidden : pickN(rng, FORBIDDEN_WORDS, 4).join(", "),
           
           structure: shouldLock('structure') ? currentBp.structure : pick(rng, STRUCTURES),
           twist: shouldLock('twist') ? currentBp.twist : pick(rng, TWISTS),
@@ -341,7 +388,7 @@
         if (!currentBp) return showToast("Generate first! 🎲");
         const newSaves = [currentBp, ...saves];
         setSaves(newSaves);
-        localStorage.setItem("lyricalchemy_saves_v9", JSON.stringify(newSaves));
+        localStorage.setItem("lyricalchemy_saves_v10", JSON.stringify(newSaves));
         showToast("Saved to Studio ✨");
       };
 
@@ -350,7 +397,6 @@
         showToast("Loaded blueprint 📥");
       };
 
-      // 🛠️ FIX: Re-wired the Export JSON button here!
       const handleExport = () => {
         if (!currentBp) return showToast("Generate first! 🎲");
         const blob = new Blob([JSON.stringify(currentBp, null, 2)], { type: "application/json" });
@@ -375,7 +421,7 @@
           <header>
             <div className="brand">
               <h1>LyricAlchemy ✨</h1>
-              <p>The Ultimate Engine. Chaos Dial is fully operational.</p>
+              <p>The Final Boss. Write masterpieces, ignore clichés.</p>
             </div>
             <div className="pillrow">
               <div className="pill">Seed: <b>{currentBp ? currentBp.seed : "—"}</b></div>
@@ -390,7 +436,6 @@
                 <div className="row">
                   <button className="primary" onClick={() => handleGenerate(false)}>🎲 Generate</button>
                   <button className="small" onClick={handleSave}>💾 Save</button>
-                  {/* 🛠️ RESTORED: Export Button! */}
                   <button className="small" onClick={handleExport}>📤 Export JSON</button>
                 </div>
               </div>
@@ -413,8 +458,10 @@
                   <div className="blueprint-section">
                     <h3>🌌 The Vibe</h3>
                     <div className="kv-grid">
+                      <EditableKeyValue label="Working Title" value={getVal('title', currentBp.title)} lockKey="title" locks={locks} toggleLock={toggleLock} onEditSave={handleOverrideSave} />
                       <EditableKeyValue label="Genres" value={getVal('genres', `${currentBp.genres.primary} + ${currentBp.genres.secondary} (Flavor)`)} lockKey="genres" locks={locks} toggleLock={toggleLock} onEditSave={handleOverrideSave} />
                       <EditableKeyValue label="BPM, Key & Scale" value={getVal('music', currentBp.music)} lockKey="music" locks={locks} toggleLock={toggleLock} onEditSave={handleOverrideSave} />
+                      <EditableKeyValue label="Instrumentation" value={getVal('instrumentation', currentBp.instrumentation)} lockKey="instrumentation" locks={locks} toggleLock={toggleLock} onEditSave={handleOverrideSave} />
                     </div>
                   </div>
 
@@ -434,6 +481,7 @@
                       <EditableKeyValue label="Rhyme & Diction" value={getVal('rhyme', currentBp.rhyme)} lockKey="rhyme" locks={locks} toggleLock={toggleLock} onEditSave={handleOverrideSave} />
                       <EditableKeyValue label="Vocal Tone" value={getVal('vocal', `${currentBp.vocal.name}\nVerse: ${currentBp.vocal.verse}\nChorus: ${currentBp.vocal.chorus}\nBridge: ${currentBp.vocal.bridge}`)} lockKey="vocal" locks={locks} toggleLock={toggleLock} onEditSave={handleOverrideSave} />
                       <EditableKeyValue label="Flow & Cadence" value={getVal('cadence', currentBp.cadence)} lockKey="cadence" locks={locks} toggleLock={toggleLock} onEditSave={handleOverrideSave} />
+                      <EditableKeyValue label="🚫 Forbidden Words" value={getVal('forbidden', currentBp.forbidden)} lockKey="forbidden" locks={locks} toggleLock={toggleLock} onEditSave={handleOverrideSave} danger={true} />
                     </div>
                   </div>
 
@@ -462,7 +510,7 @@
             <aside className="glass-panel" style={{ alignSelf: 'start' }}>
               <div className="card-hd">
                 <h2>Saved Blueprints</h2>
-                {saves.length > 0 && <button className="small danger" onClick={() => { setSaves([]); localStorage.removeItem("lyricalchemy_saves_v9"); showToast("Cleared 🗑️"); }}>Clear</button>}
+                {saves.length > 0 && <button className="small danger" onClick={() => { setSaves([]); localStorage.removeItem("lyricalchemy_saves_v10"); showToast("Cleared 🗑️"); }}>Clear</button>}
               </div>
               <div className="card-bd">
                 {saves.length === 0 ? (
@@ -470,7 +518,7 @@
                 ) : (
                   <div className="saved-list">
                     {saves.map((bp, i) => {
-                      const title = (bp.overrides && bp.overrides.genres) ? bp.overrides.genres : bp.genres.primary;
+                      const title = (bp.overrides && bp.overrides.title) ? bp.overrides.title : bp.title;
                       return (
                         <div key={i} className="fav">
                           <div className="fav-title">{title}</div>
