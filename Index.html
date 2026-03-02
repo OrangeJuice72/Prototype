@@ -1,0 +1,831 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>LyricAlchemy — Prototype</title>
+  <style>
+    :root{
+      --bg:#0b0c10;
+      --panel:#12131a;
+      --panel2:#151626;
+      --text:#e9e9f2;
+      --muted:#a7a7c0;
+      --line:rgba(255,255,255,.08);
+      --accent:#b38cff; /* purple-ish */
+      --accent2:#ffd37a;
+      --danger:#ff6b88;
+      --ok:#76f7bf;
+      --shadow: 0 16px 50px rgba(0,0,0,.55);
+      --radius: 18px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      background: radial-gradient(1200px 700px at 20% -10%, rgba(179,140,255,.18), transparent 55%),
+                  radial-gradient(1000px 600px at 90% 0%, rgba(255,211,122,.12), transparent 55%),
+                  linear-gradient(180deg, var(--bg), #07070a);
+      color:var(--text);
+      min-height:100vh;
+      display:flex;
+      justify-content:center;
+      padding:28px 14px 60px;
+    }
+    .wrap{width:min(1100px, 100%);}
+    header{
+      display:flex;
+      align-items:flex-end;
+      justify-content:space-between;
+      gap:14px;
+      margin-bottom:18px;
+    }
+    .brand{
+      display:flex; flex-direction:column; gap:6px;
+    }
+    .brand h1{
+      margin:0;
+      font-size:24px;
+      letter-spacing:.2px;
+    }
+    .brand p{margin:0; color:var(--muted); font-size:13px;}
+    .pillrow{
+      display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end;
+    }
+    .pill{
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.03);
+      border-radius:999px;
+      padding:8px 12px;
+      font-size:12px;
+      color:var(--muted);
+      display:flex; gap:8px; align-items:center;
+    }
+    .pill b{color:var(--text); font-weight:600}
+    .grid{
+      display:grid;
+      grid-template-columns: 1.15fr .85fr;
+      gap:16px;
+    }
+    @media (max-width: 980px){
+      .grid{grid-template-columns: 1fr;}
+      header{align-items:flex-start; flex-direction:column}
+      .pillrow{justify-content:flex-start}
+    }
+    .card{
+      background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+    .card .hd{
+      padding:14px 16px;
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+      background:linear-gradient(180deg, rgba(179,140,255,.10), rgba(255,255,255,0));
+      border-bottom:1px solid var(--line);
+    }
+    .card .hd h2{margin:0; font-size:14px; letter-spacing:.2px;}
+    .card .bd{padding:16px;}
+    .row{display:flex; gap:10px; flex-wrap:wrap; align-items:center;}
+    button{
+      appearance:none;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.04);
+      color:var(--text);
+      border-radius:12px;
+      padding:10px 12px;
+      font-weight:600;
+      cursor:pointer;
+      transition: transform .08s ease, background .2s ease, border-color .2s ease;
+    }
+    button:hover{background:rgba(255,255,255,.06); border-color:rgba(179,140,255,.35)}
+    button:active{transform: translateY(1px) scale(.99)}
+    .primary{
+      background:linear-gradient(180deg, rgba(179,140,255,.32), rgba(179,140,255,.14));
+      border-color: rgba(179,140,255,.35);
+    }
+    .primary:hover{border-color: rgba(179,140,255,.65)}
+    .danger{
+      background:linear-gradient(180deg, rgba(255,107,136,.22), rgba(255,107,136,.10));
+      border-color: rgba(255,107,136,.28);
+    }
+    .danger:hover{border-color: rgba(255,107,136,.60)}
+    .small{padding:8px 10px; font-size:12px; font-weight:650}
+    label{
+      font-size:12px;
+      color:var(--muted);
+      display:flex;
+      align-items:center;
+      gap:8px;
+    }
+    input[type="text"], input[type="number"]{
+      width: 220px;
+      max-width: 100%;
+      padding:10px 12px;
+      border-radius:12px;
+      border:1px solid var(--line);
+      background:rgba(0,0,0,.25);
+      color:var(--text);
+      outline:none;
+    }
+    input[type="text"]:focus, input[type="number"]:focus{
+      border-color: rgba(179,140,255,.55);
+      box-shadow: 0 0 0 3px rgba(179,140,255,.12);
+    }
+    input[type="range"]{width:220px}
+    .kv{
+      display:grid;
+      grid-template-columns: 1fr 1.4fr;
+      gap:10px 14px;
+      margin-top:12px;
+    }
+    .kv .k{
+      color:var(--muted);
+      font-size:12px;
+      padding-top:4px;
+    }
+    .kv .v{
+      padding:10px 12px;
+      border-radius:14px;
+      border:1px solid var(--line);
+      background:rgba(0,0,0,.18);
+      line-height:1.35;
+      min-height:44px;
+    }
+    .tag{
+      display:inline-flex; gap:8px; align-items:center;
+      padding:7px 10px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.03);
+      font-size:12px;
+      color:var(--muted);
+      margin:6px 8px 0 0;
+    }
+    .tag b{color:var(--text)}
+    .sectionTitle{
+      margin:16px 0 8px;
+      font-size:12px;
+      color:var(--muted);
+      text-transform:uppercase;
+      letter-spacing:.12em;
+    }
+    .structure{
+      display:grid;
+      gap:10px;
+    }
+    .step{
+      border:1px solid var(--line);
+      background:rgba(0,0,0,.16);
+      border-radius:14px;
+      padding:12px;
+    }
+    .step .top{
+      display:flex; justify-content:space-between; align-items:baseline; gap:10px;
+    }
+    .step .name{font-weight:750}
+    .step .hint{color:var(--muted); font-size:12px}
+    .step .desc{margin-top:6px; color:var(--text); opacity:.92; font-size:13px; line-height:1.4}
+    .muted{color:var(--muted)}
+    .list{
+      display:grid; gap:10px;
+    }
+    .fav{
+      border:1px solid var(--line);
+      border-radius:14px;
+      padding:12px;
+      background:rgba(0,0,0,.16);
+      display:grid;
+      gap:8px;
+    }
+    .fav .meta{
+      display:flex; gap:10px; flex-wrap:wrap; align-items:center;
+      color:var(--muted); font-size:12px;
+    }
+    .fav .title{
+      font-weight:750;
+      line-height:1.25;
+    }
+    .fav .actions{display:flex; gap:8px; flex-wrap:wrap}
+    .toast{
+      position:fixed;
+      bottom:18px; left:50%;
+      transform:translateX(-50%);
+      background:rgba(15,16,24,.92);
+      border:1px solid var(--line);
+      border-radius:999px;
+      padding:10px 14px;
+      box-shadow:var(--shadow);
+      color:var(--text);
+      font-size:13px;
+      opacity:0;
+      pointer-events:none;
+      transition: opacity .18s ease, transform .18s ease;
+    }
+    .toast.show{
+      opacity:1;
+      transform:translateX(-50%) translateY(-4px);
+    }
+    .accent{
+      color:var(--accent2);
+      font-weight:700;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="brand">
+        <h1>LyricAlchemy ✨</h1>
+        <p>Genre fusion + structure + emotion tension → a real songwriting blueprint (prototype v0.1)</p>
+      </div>
+      <div class="pillrow">
+        <div class="pill">Seed: <b id="seedLabel">—</b></div>
+        <div class="pill">Mode: <b id="modeLabel">Studio</b></div>
+        <div class="pill">Chaos: <b id="chaosLabel">20</b></div>
+      </div>
+    </header>
+
+    <div class="grid">
+      <!-- MAIN GENERATOR -->
+      <section class="card">
+        <div class="hd">
+          <h2>Generator</h2>
+          <div class="row">
+            <button class="primary" id="btnGenerate">🎲 Generate</button>
+            <button class="small" id="btnSave">💾 Save</button>
+            <button class="small" id="btnExport">📤 Export JSON</button>
+            <button class="danger small" id="btnReset">🧹 Reset</button>
+          </div>
+        </div>
+        <div class="bd">
+          <div class="row" style="justify-content:space-between;">
+            <label>Seed (repeatable)
+              <input id="seedInput" type="text" placeholder="leave blank for random" />
+            </label>
+            <label>Chaos (coherent → wild)
+              <input id="chaos" type="range" min="0" max="100" value="20" />
+            </label>
+          </div>
+
+          <div class="kv" aria-label="Key Values">
+            <div class="k">Genres</div>
+            <div class="v" id="outGenres">—</div>
+
+            <div class="k">Topic</div>
+            <div class="v" id="outTopic">—</div>
+
+            <div class="k">Emotion (Surface / Core)</div>
+            <div class="v" id="outEmotion">—</div>
+
+            <div class="k">Imagery Theme</div>
+            <div class="v" id="outImagery">—</div>
+
+            <div class="k">Rhyme & Diction</div>
+            <div class="v" id="outRhyme">—</div>
+
+            <div class="k">Vocal Direction</div>
+            <div class="v" id="outVocal">—</div>
+          </div>
+
+          <div class="sectionTitle">Structure Blueprint</div>
+          <div class="structure" id="outStructure"></div>
+
+          <div class="sectionTitle">Hook Starters</div>
+          <div class="v" id="outHooks">—</div>
+
+          <div class="sectionTitle">Optional Musical Context</div>
+          <div class="v" id="outMusic">—</div>
+        </div>
+      </section>
+
+      <!-- SAVED -->
+      <aside class="card">
+        <div class="hd">
+          <h2>Saved Blueprints</h2>
+          <div class="row">
+            <button class="small" id="btnClearSaves">🗑️ Clear</button>
+          </div>
+        </div>
+        <div class="bd">
+          <div class="muted" style="font-size:13px; line-height:1.45; margin-bottom:12px;">
+            Save your favorites for later. Everything stores locally in your browser (no account needed). 🫶
+          </div>
+          <div class="list" id="savedList"></div>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <div class="toast" id="toast">Saved ✨</div>
+
+<script>
+/** =========================
+ *  Seeded RNG (Mulberry32)
+ *  ========================= */
+function xmur3(str) {
+  let h = 1779033703 ^ str.length;
+  for (let i = 0; i < str.length; i++) {
+    h = Math.imul(h ^ str.charCodeAt(i), 3432918353);
+    h = (h << 13) | (h >>> 19);
+  }
+  return function() {
+    h = Math.imul(h ^ (h >>> 16), 2246822507);
+    h = Math.imul(h ^ (h >>> 13), 3266489909);
+    return (h ^= h >>> 16) >>> 0;
+  };
+}
+function mulberry32(a) {
+  return function() {
+    let t = a += 0x6D2B79F5;
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+function makeRng(seedStr){
+  const seed = seedStr && seedStr.trim() ? seedStr.trim() : String(Date.now());
+  const seedFn = xmur3(seed);
+  const a = seedFn();
+  return { seed, rand: mulberry32(a) };
+}
+
+/** =========================
+ *  Data (expand later)
+ *  ========================= */
+const GENRES = [
+  "Pop", "Indie Pop", "Synthwave", "Hip-Hop", "Trap", "R&B", "Neo-Soul",
+  "Country", "Alt-Country", "Folk", "Indie Folk", "Rock", "Alt Rock",
+  "Dream Pop", "Shoegaze", "EDM", "House", "Techno", "Drum & Bass",
+  "Metal", "Punk", "Emo", "Jazz", "Bossa Nova", "Reggae", "K-Pop",
+  "Gospel", "Lo-fi", "Ambient", "Classical Crossover"
+];
+
+const TOPICS = [
+  "Leaving your hometown", "A love that never commits", "Rebuilding after failure",
+  "A friendship fading quietly", "Wanting revenge but choosing peace",
+  "Feeling out of place in your own life", "Missing someone you shouldn’t",
+  "Starting over in secret", "Being addicted to the past", "Chasing a dream that’s changing you",
+  "Talking to your younger self", "A night drive you don’t want to end",
+  "Learning to forgive yourself", "Falling for the wrong person at the right time",
+  "A promise you couldn’t keep", "Growing apart gracefully"
+];
+
+const EMOTIONS = [
+  "Nostalgia", "Hope", "Resentment", "Longing", "Confidence", "Guilt",
+  "Yearning", "Relief", "Regret", "Defiance", "Tenderness", "Jealousy",
+  "Awe", "Grief", "Calm", "Restlessness"
+];
+
+const IMAGERY = [
+  "Fading summer light", "Neon reflections on wet pavement", "Dusty photos in a drawer",
+  "Cold air in an empty room", "A cigarette burning down unnoticed", "Motel curtains at sunrise",
+  "Ocean salt on skin", "Train stations and missed calls", "Streetlights flickering",
+  "Snow falling on quiet streets", "A cracked phone screen", "Warm kitchen lamplight"
+];
+
+const RHYME = [
+  "Simple end rhymes, conversational diction",
+  "Slant rhymes, modern phrasing, internal echoes",
+  "Sparse rhymes, vivid imagery, punchy lines",
+  "Dense internal rhymes, rhythmic wordplay",
+  "No-rhyme free verse but with strong cadence",
+  "Call-and-response phrasing, hook-forward repetition"
+];
+
+const VOCAL_ARCHETYPES = [
+  { name:"The Confessor", verse:"close-mic, intimate, restrained", chorus:"open tone, warm lift", bridge:"nearly spoken, vulnerable" },
+  { name:"The Rebel", verse:"gritty, forward, rhythmic phrasing", chorus:"bigger edge, punch consonants", bridge:"half-sung grit, tension" },
+  { name:"The Dreamer", verse:"airy, soft, floating vowels", chorus:"soaring, layered harmonies", bridge:"breathy clarity, emotional crack" },
+  { name:"The Villain", verse:"low and controlled, theatrical", chorus:"dramatic lift, sharp dynamics", bridge:"cold whisper → sudden snap" },
+  { name:"The Storyteller", verse:"clear articulation, narrative drive", chorus:"anthemic, singalong", bridge:"pause-heavy, honest delivery" }
+];
+
+const STRUCTURES = [
+  {
+    name: "Modern Pop Arc",
+    steps: [
+      ["Verse 1", "Scene setting", "Concrete details, one strong image per line."],
+      ["Pre-Chorus", "Tension climb", "Shorten lines, raise urgency, hint the thesis."],
+      ["Chorus", "Thesis + hook", "One clear statement, repeatable phrasing."],
+      ["Verse 2", "Contrast / escalation", "Add a twist, reveal imbalance or regret."],
+      ["Pre-Chorus", "Higher stakes", "Same shape, sharper confession."],
+      ["Chorus", "Bigger payoff", "Add one new line at the end for lift."],
+      ["Bridge", "Perspective flip", "Say one plain truth with no metaphor."],
+      ["Final Chorus", "Expanded hook", "Stack harmonies, extend the last phrase."]
+    ]
+  },
+  {
+    name: "Alt / Indie Narrative",
+    steps: [
+      ["Verse 1", "Place + moment", "Anchor in time/location. Let details do the work."],
+      ["Chorus", "Emotional summary", "Not too literal—one memorable phrase."],
+      ["Verse 2", "Memory replay", "Show the same event from a new angle."],
+      ["Chorus", "Reframe", "Same hook, changed meaning with one new word."],
+      ["Bridge", "Confession", "Drop the ‘cool’—be embarrassingly honest once."],
+      ["Final Chorus", "Resolution", "Either acceptance or refusal. No in-between."]
+    ]
+  },
+  {
+    name: "Rap / R&B Switch-Up",
+    steps: [
+      ["Intro", "Tone-set", "One-liner that defines the vibe."],
+      ["Verse", "Detail + flex", "Specifics, clever images, internal rhyme pockets."],
+      ["Hook", "Sticky mantra", "Short, repeatable, emotionally loaded."],
+      ["Verse 2", "Escalate / reveal", "Add vulnerability or a contradiction."],
+      ["Bridge", "Melodic lift", "Stretch vowels, simplify language, let it breathe."],
+      ["Final Hook", "Harder", "Double the cadence or add ad-libs."]
+    ]
+  }
+];
+
+/** =========================
+ *  Weighted logic helpers
+ *  ========================= */
+function pick(rng, arr){ return arr[Math.floor(rng.rand() * arr.length)]; }
+
+function pickTwoGenres(rng, chaos){
+  // Lower chaos = more compatible second genre.
+  // We'll “soft cluster” genres by families.
+  const families = {
+    pop: ["Pop","Indie Pop","K-Pop","R&B","Neo-Soul"],
+    electronic: ["Synthwave","EDM","House","Techno","Drum & Bass","Ambient","Lo-fi"],
+    guitar: ["Rock","Alt Rock","Dream Pop","Shoegaze","Punk","Emo"],
+    roots: ["Country","Alt-Country","Folk","Indie Folk","Reggae","Bossa Nova","Gospel"],
+    heavy: ["Metal"],
+    jazz: ["Jazz","Classical Crossover"]
+  };
+
+  const famKeys = Object.keys(families);
+  const primaryFam = pick(rng, famKeys);
+  const primary = pick(rng, families[primaryFam]);
+
+  // choose secondary family:
+  // At low chaos, likely same/neighbor. At high chaos, any.
+  const pSame = Math.max(0.05, 0.75 - chaos/140);   // ~0.75 at 0 chaos -> ~0.04 at 100 chaos
+  const secondaryFam = (rng.rand() < pSame) ? primaryFam : pick(rng, famKeys);
+  let secondary = pick(rng, families[secondaryFam]);
+
+  // ensure distinct
+  if (secondary === primary){
+    const pool = GENRES.filter(g => g !== primary);
+    secondary = pick(rng, pool);
+  }
+
+  // order: primary dominant, secondary flavor
+  return { primary, secondary, primaryFam, secondaryFam };
+}
+
+function emotionPair(rng, chaos){
+  // Lower chaos = complementary tension pairs; higher chaos = any random.
+  const curatedPairs = [
+    ["Confidence","Insecurity"],
+    ["Nostalgia","Resentment"],
+    ["Hope","Fear"],
+    ["Relief","Grief"],
+    ["Tenderness","Jealousy"],
+    ["Calm","Restlessness"],
+    ["Defiance","Guilt"],
+    ["Longing","Regret"]
+  ];
+
+  const useCurated = rng.rand() < (0.85 - chaos/160); // ~0.85 -> ~0.22
+  if (useCurated){
+    const pair = pick(rng, curatedPairs);
+    // surface = first, core = second
+    return { surface: pair[0], core: pair[1] };
+  }
+
+  // random distinct
+  let surface = pick(rng, EMOTIONS);
+  let core = pick(rng, EMOTIONS);
+  if (core === surface){
+    core = pick(rng, EMOTIONS.filter(e => e !== surface));
+  }
+  return { surface, core };
+}
+
+function structureForGenres(rng, primaryFam){
+  // Soft mapping
+  if (primaryFam === "pop" || primaryFam === "electronic") return STRUCTURES[0];
+  if (primaryFam === "guitar" || primaryFam === "roots") return STRUCTURES[1];
+  if (primaryFam === "heavy" || primaryFam === "jazz") return pick(rng, [STRUCTURES[1], STRUCTURES[2]]);
+  return pick(rng, STRUCTURES);
+}
+
+function musicContext(rng, primaryFam){
+  const bpmRanges = {
+    pop: [[88,110],[110,128]],
+    electronic: [[120,130],[135,174]],
+    guitar: [[78,102],[100,140]],
+    roots: [[72,96],[90,112]],
+    heavy: [[120,160],[160,200]],
+    jazz: [[70,95],[95,140]]
+  };
+  const keys = ["A minor","C major","E minor","G major","D minor","B minor","F major"];
+  const palettes = {
+    pop: ["tight drums","glossy synths","bright bass","stacked harmonies"],
+    electronic: ["sidechained pads","pulsing bass","crispy hats","riser FX"],
+    guitar: ["clean guitar","roomy drums","warm bass","texture layers"],
+    roots: ["acoustic guitar","brush drums","upright-ish bass","subtle strings"],
+    heavy: ["down-tuned guitars","big kick/snare","aggressive bass","tight stops"],
+    jazz: ["upright bass","piano voicings","brush kit","horn stabs"]
+  };
+
+  const range = pick(rng, bpmRanges[primaryFam] || [[90,120]]);
+  const bpm = `${range[0]}–${range[1]} BPM`;
+  const key = pick(rng, keys);
+  const pal = palettes[primaryFam] ? palettes[primaryFam] : ["simple groove","supportive bass","space"];
+  const pickPal = [...pal].sort(() => rng.rand()-0.5).slice(0, 3).join(", ");
+  return `Tempo: ${bpm}\nKey: ${key}\nPalette: ${pickPal}`;
+}
+
+function hookStarters(rng, topic, surface, imagery){
+  const frames = [
+    `I keep ${imagery.toLowerCase()} like a secret I won't confess…`,
+    `If ${topic.toLowerCase()} was a song, I'd skip the part where I break…`,
+    `You called it ${surface.toLowerCase()}, but I felt something else underneath…`,
+    `I learned the hard way: love doesn't wait, it just leaves a light on…`,
+    `Tonight the world looks different—like it's trying to forget us…`,
+    `Say my name like you mean it, or don't say it at all…`
+  ];
+  // pick 3 unique
+  const set = new Set();
+  while (set.size < 3){
+    set.add(pick(rng, frames));
+  }
+  return [...set];
+}
+
+/** =========================
+ *  UI State + Actions
+ *  ========================= */
+const el = (id)=>document.getElementById(id);
+const ui = {
+  seedInput: el("seedInput"),
+  seedLabel: el("seedLabel"),
+  chaos: el("chaos"),
+  chaosLabel: el("chaosLabel"),
+  modeLabel: el("modeLabel"),
+  outGenres: el("outGenres"),
+  outTopic: el("outTopic"),
+  outEmotion: el("outEmotion"),
+  outImagery: el("outImagery"),
+  outRhyme: el("outRhyme"),
+  outVocal: el("outVocal"),
+  outStructure: el("outStructure"),
+  outHooks: el("outHooks"),
+  outMusic: el("outMusic"),
+  savedList: el("savedList"),
+  toast: el("toast")
+};
+
+let current = null;
+
+function toast(msg){
+  ui.toast.textContent = msg;
+  ui.toast.classList.add("show");
+  setTimeout(()=>ui.toast.classList.remove("show"), 1100);
+}
+
+function chaosModeLabel(c){
+  if (c <= 25) return "Studio";
+  if (c <= 60) return "Hybrid";
+  return "Experimental";
+}
+
+function renderBlueprint(bp){
+  ui.outGenres.textContent = `${bp.genres.primary} (primary) + ${bp.genres.secondary} (flavor)`;
+  ui.outTopic.textContent = bp.topic;
+  ui.outEmotion.textContent = `${bp.emotion.surface} / ${bp.emotion.core}`;
+  ui.outImagery.textContent = bp.imagery;
+  ui.outRhyme.textContent = bp.rhyme;
+  ui.outVocal.textContent =
+    `${bp.vocal.name}\nVerse: ${bp.vocal.verse}\nChorus: ${bp.vocal.chorus}\nBridge: ${bp.vocal.bridge}`;
+
+  ui.outStructure.innerHTML = "";
+  bp.structure.steps.forEach(([name, hint, desc])=>{
+    const div = document.createElement("div");
+    div.className = "step";
+    div.innerHTML = `
+      <div class="top">
+        <div class="name">${name}</div>
+        <div class="hint">${hint}</div>
+      </div>
+      <div class="desc">${desc}</div>
+    `;
+    ui.outStructure.appendChild(div);
+  });
+
+  const hooks = bp.hooks.map(h=>`• ${h}`).join("\n");
+  ui.outHooks.textContent = hooks;
+
+  ui.outMusic.textContent = bp.music;
+  ui.seedLabel.textContent = bp.seed;
+}
+
+function generate(){
+  const chaos = Number(ui.chaos.value);
+  ui.chaosLabel.textContent = String(chaos);
+  ui.modeLabel.textContent = chaosModeLabel(chaos);
+
+  const { seed, rand } = makeRng(ui.seedInput.value);
+  const rng = { seed, rand };
+
+  const genres = pickTwoGenres(rng, chaos);
+  const topic = pick(rng, TOPICS);
+  const emotion = emotionPair(rng, chaos);
+
+  // Imagery ties slightly to emotion at low chaos by weighting:
+  let imagery = pick(rng, IMAGERY);
+  if (chaos < 35){
+    const moody = ["Neon reflections on wet pavement","Cold air in an empty room","Train stations and missed calls","Streetlights flickering","A cracked phone screen"];
+    const warm  = ["Fading summer light","Warm kitchen lamplight","Ocean salt on skin","Motel curtains at sunrise","Dusty photos in a drawer"];
+    const pickPool = (["Grief","Regret","Resentment","Guilt","Restlessness"].includes(emotion.core)) ? moody : warm;
+    imagery = (rng.rand() < 0.65) ? pick(rng, pickPool) : pick(rng, IMAGERY);
+  }
+
+  // Rhyme style influenced by family:
+  let rhyme = pick(rng, RHYME);
+  if (chaos < 30){
+    if (genres.primaryFam === "pop") rhyme = pick(rng, ["Slant rhymes, modern phrasing, internal echoes", "Call-and-response phrasing, hook-forward repetition"]);
+    if (genres.primaryFam === "electronic") rhyme = pick(rng, ["Sparse rhymes, vivid imagery, punchy lines", "Call-and-response phrasing, hook-forward repetition"]);
+    if (genres.primaryFam === "guitar") rhyme = pick(rng, ["Slant rhymes, modern phrasing, internal echoes", "No-rhyme free verse but with strong cadence"]);
+    if (genres.primaryFam === "roots") rhyme = pick(rng, ["Simple end rhymes, conversational diction", "Sparse rhymes, vivid imagery, punchy lines"]);
+  }
+
+  // Vocal archetype
+  const vocal = pick(rng, VOCAL_ARCHETYPES);
+
+  // Structure selection
+  const structure = structureForGenres(rng, genres.primaryFam);
+
+  // Hooks + Music context
+  const hooks = hookStarters(rng, topic, emotion.surface, imagery);
+  const music = musicContext(rng, genres.primaryFam);
+
+  current = {
+    seed,
+    chaos,
+    mode: chaosModeLabel(chaos),
+    createdAt: new Date().toISOString(),
+    genres,
+    topic,
+    emotion,
+    imagery,
+    rhyme,
+    vocal,
+    structure,
+    hooks,
+    music
+  };
+
+  renderBlueprint(current);
+}
+
+function getSaves(){
+  try{
+    return JSON.parse(localStorage.getItem("lyricalchemy_saves") || "[]");
+  }catch{
+    return [];
+  }
+}
+function setSaves(arr){
+  localStorage.setItem("lyricalchemy_saves", JSON.stringify(arr));
+}
+function renderSaves(){
+  const saves = getSaves();
+  ui.savedList.innerHTML = "";
+  if (!saves.length){
+    ui.savedList.innerHTML = `<div class="muted">Nothing saved yet. Hit <span class="accent">Save</span> after you generate ✨</div>`;
+    return;
+  }
+  saves.slice().reverse().forEach((bp, idxFromEnd)=>{
+    const idx = saves.length - 1 - idxFromEnd;
+    const div = document.createElement("div");
+    div.className = "fav";
+    div.innerHTML = `
+      <div class="title">${bp.genres.primary} + ${bp.genres.secondary} — ${bp.topic}</div>
+      <div class="meta">
+        <span>Seed: <b>${bp.seed}</b></span>
+        <span>•</span>
+        <span>${bp.mode} (${bp.chaos})</span>
+        <span>•</span>
+        <span>${bp.emotion.surface}/${bp.emotion.core}</span>
+      </div>
+      <div>
+        <span class="tag"><b>Imagery</b> ${bp.imagery}</span>
+        <span class="tag"><b>Vocal</b> ${bp.vocal.name}</span>
+      </div>
+      <div class="actions">
+        <button class="small" data-act="load" data-idx="${idx}">📥 Load</button>
+        <button class="small" data-act="copy" data-idx="${idx}">📋 Copy JSON</button>
+        <button class="danger small" data-act="del" data-idx="${idx}">🗑️ Delete</button>
+      </div>
+    `;
+    ui.savedList.appendChild(div);
+  });
+
+  ui.savedList.querySelectorAll("button[data-act]").forEach(btn=>{
+    btn.addEventListener("click", ()=>{
+      const act = btn.getAttribute("data-act");
+      const idx = Number(btn.getAttribute("data-idx"));
+      const saves = getSaves();
+      const bp = saves[idx];
+      if (!bp) return;
+
+      if (act === "load"){
+        current = bp;
+        ui.seedInput.value = bp.seed;
+        ui.chaos.value = bp.chaos;
+        ui.chaosLabel.textContent = String(bp.chaos);
+        ui.modeLabel.textContent = bp.mode;
+        renderBlueprint(bp);
+        toast("Loaded ✨");
+      }
+      if (act === "copy"){
+        navigator.clipboard.writeText(JSON.stringify(bp, null, 2));
+        toast("Copied JSON 📋");
+      }
+      if (act === "del"){
+        saves.splice(idx, 1);
+        setSaves(saves);
+        renderSaves();
+        toast("Deleted 🗑️");
+      }
+    });
+  });
+}
+
+function saveCurrent(){
+  if (!current){
+    toast("Generate first 🎲");
+    return;
+  }
+  const saves = getSaves();
+  // de-dup by seed + topic + genres:
+  const sig = `${current.seed}|${current.topic}|${current.genres.primary}|${current.genres.secondary}|${current.chaos}`;
+  const exists = saves.some(s => `${s.seed}|${s.topic}|${s.genres.primary}|${s.genres.secondary}|${s.chaos}` === sig);
+  if (!exists){
+    saves.push(current);
+    setSaves(saves);
+    renderSaves();
+    toast("Saved ✨");
+  }else{
+    toast("Already saved 😄");
+  }
+}
+
+function exportCurrent(){
+  if (!current){
+    toast("Generate first 🎲");
+    return;
+  }
+  const blob = new Blob([JSON.stringify(current, null, 2)], {type:"application/json"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `lyricalchemy_${current.seed}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function resetUI(){
+  current = null;
+  ui.outGenres.textContent = "—";
+  ui.outTopic.textContent = "—";
+  ui.outEmotion.textContent = "—";
+  ui.outImagery.textContent = "—";
+  ui.outRhyme.textContent = "—";
+  ui.outVocal.textContent = "—";
+  ui.outStructure.innerHTML = "";
+  ui.outHooks.textContent = "—";
+  ui.outMusic.textContent = "—";
+  ui.seedLabel.textContent = "—";
+  toast("Reset 🧹");
+}
+
+document.getElementById("btnGenerate").addEventListener("click", generate);
+document.getElementById("btnSave").addEventListener("click", saveCurrent);
+document.getElementById("btnExport").addEventListener("click", exportCurrent);
+document.getElementById("btnReset").addEventListener("click", resetUI);
+
+document.getElementById("btnClearSaves").addEventListener("click", ()=>{
+  setSaves([]);
+  renderSaves();
+  toast("Cleared 🗑️");
+});
+
+ui.chaos.addEventListener("input", ()=>{
+  const c = Number(ui.chaos.value);
+  ui.chaosLabel.textContent = String(c);
+  ui.modeLabel.textContent = chaosModeLabel(c);
+});
+
+// Boot
+renderSaves();
+generate();
+</script>
+</body>
+</html>
