@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>LyricAlchemy — Lock & Chaos Edition</title>
+  <title>LyricAlchemy — Custom Edit Edition</title>
   
   <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
@@ -46,16 +46,7 @@
 
     .wrap { width: min(1200px, 100%); }
 
-    .glass-panel {
-      background: var(--glass);
-      backdrop-filter: blur(24px);
-      -webkit-backdrop-filter: blur(24px);
-      border: 1px solid var(--line);
-      border-radius: var(--radius-lg);
-      box-shadow: var(--shadow);
-      overflow: hidden;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
+    .glass-panel { background: var(--glass); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); border: 1px solid var(--line); border-radius: var(--radius-lg); box-shadow: var(--shadow); overflow: hidden; transition: transform 0.3s ease, box-shadow 0.3s ease; }
 
     header { display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; margin-bottom: 30px; flex-wrap: wrap; }
     .brand h1 { font-size: 28px; letter-spacing: -0.5px; background: linear-gradient(135deg, #fff, var(--accent-purple)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 4px; }
@@ -93,7 +84,16 @@
     
     .kv { display: flex; flex-direction: column; gap: 6px; }
     .kv .k { color: var(--muted); font-size: 12px; display: flex; justify-content: space-between; align-items: center; }
-    .kv .v { padding: 12px 16px; border-radius: 10px; background: rgba(255,255,255,0.02); border: 1px solid var(--line); font-size: 14px; white-space: pre-wrap; line-height: 1.6; transition: border-color 0.3s ease, box-shadow 0.3s ease; }
+    
+    /* EDITABLE STYLES */
+    .v { padding: 12px 16px; border-radius: 10px; background: rgba(255,255,255,0.02); border: 1px solid var(--line); font-size: 14px; white-space: pre-wrap; line-height: 1.6; transition: border-color 0.3s ease, box-shadow 0.3s ease, background 0.2s ease; }
+    .editable { cursor: text; position: relative; }
+    .editable:hover { background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.2); }
+    .editable::after { content: "✏️"; position: absolute; right: 12px; top: 12px; opacity: 0; transition: opacity 0.2s; font-size: 12px; }
+    .editable:hover::after { opacity: 0.5; }
+    
+    textarea.v { width: 100%; font-family: inherit; color: var(--accent-gold); outline: 1px solid var(--accent-gold); box-shadow: 0 0 15px rgba(255, 211, 122, 0.1); resize: vertical; background: rgba(0,0,0,0.4); }
+    
     .kv.locked .v { border-color: rgba(255, 211, 122, 0.4); box-shadow: 0 0 10px rgba(255, 211, 122, 0.05); background: rgba(255, 211, 122, 0.03); }
 
     .lock-btn { background: none; border: none; font-size: 14px; cursor: pointer; padding: 4px; border-radius: 6px; opacity: 0.5; transition: all 0.2s ease; }
@@ -105,7 +105,10 @@
     .step-hd { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px; flex-wrap: wrap; gap: 8px;}
     .step-name { font-weight: 700; color: var(--accent-purple); font-size: 14px; }
     .step-hint { font-size: 12px; color: var(--muted); background: rgba(0,0,0,0.3); padding: 4px 8px; border-radius: 6px; }
-    .step-desc { font-size: 14px; color: var(--text); opacity: 0.9; }
+    .step-desc { font-size: 14px; color: var(--text); opacity: 0.9; padding: 8px; border-radius: 8px; border: 1px solid transparent; transition: all 0.2s; }
+    .step-desc.editable:hover { background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.2); cursor: text; }
+    textarea.step-desc { width: 100%; font-family: inherit; background: rgba(0,0,0,0.4); color: var(--accent-gold); border: 1px solid var(--accent-gold); outline: none; resize: vertical; box-shadow: 0 0 10px rgba(255, 211, 122, 0.1); }
+
     .blueprint-section.locked .step { border-color: rgba(255, 211, 122, 0.3); }
 
     .saved-list { display: grid; gap: 16px; }
@@ -125,7 +128,7 @@
   <script type="text/babel">
     const { useState, useEffect } = React;
 
-    const GENRE_STRING = "Pop,Indie Pop,Synthwave,Hip-Hop,Trap,R&B,Neo-Soul,Country,Alt-Country,Folk,Indie Folk,Rock,Alt Rock,Dream Pop,Shoegaze,EDM,House,Techno,Drum & Bass,Metal,Punk,Emo,Jazz,Bossa Nova,Reggae,K-Pop,Gospel,Lo-fi,Ambient,Classical Crossover,Hyperpop,Math Rock,Dark Cabaret,Vaporwave,Pirate Metal,Cinematic Orchestral,Spaghetti Western,Acid House,Acid Jazz,Afrobeat,Afropop,Amapiano,Ambient Dub,Art Pop,Art Rock,Avant-Garde Jazz,Baile Funk,Baroque Pop,Big Beat,Black Metal,Bluegrass,Boom Bap,Bossa Nova,Breakbeat,Britpop,Bubblegum Pop,C-Pop,Celtic Punk,Chamber Pop,Chiptune,City Pop,Cloud Rap,Coldwave,Contemporary R&B,Cumbia,Cyberpunk,Dancehall,Dark Ambient,Darkwave,Death Metal,Deep House,Delta Blues,Disco,Doom Metal,Downtempo,Drill,Drone,Dubstep,Electro Swing,Electroclash,Electronic Body Music,Emo Rap,Eurodance,Folk Rock,Folktronica,Free Jazz,Funk,Future Bass,Future Garage,G-Funk,Gabber,Garage Rock,Glitch,Glitch Hop,Goth Rock,Grime,Grunge,Hard Bop,Hardcore Punk,Hardstyle,Heavy Metal,Hyperpop,IDM,Indietronica,Industrial,Italo Disco,J-Pop,J-Rock,Jazz Fusion,Jungle,K-R&B,K-Hip Hop,Krautrock,Latin Pop,Lo-Fi Hip Hop,Math Pop,Melodic Death Metal,Microhouse,Minimal Techno,Motown,Moombahton,Neoclassical,Neo-Psychedelia,New Age,New Wave,No Wave,Noise Rock,Nu Metal,Nu-Disco,Outlaw Country,Phonk,Pop Punk,Post-Bop,Post-Britpop,Post-Hardcore,Post-Punk,Post-Rock,Power Metal,Progressive House,Progressive Metal,Progressive Rock,Psychedelic Rock,Psytrance,Ranchera,Reggaeton,Salsa,Samba,Screamo,Ska,Ska Punk,Sludge Metal,Smooth Jazz,Soft Rock,Soul,Space Rock,Speed Metal,Stoner Rock,Surf Rock,Swamp Pop,Symphonic Metal,Synth-Pop,Tech House,Thrash Metal,Trance,Trip Hop,Tropical House,UK Garage,Viking Metal,Witch House,Worldbeat,Yacht Rock,Zydeco,Acappella,Acoustic Blues,Arena Rock,Bhangra,Boombahton,Bulerias,Calypso,Chansons,Choral,Cowpunk,Crust Punk,Dance-Punk,Dark Synth,Deathcore,Dixieland,Doo-wop,Dream Trance,Electro,Flamenco,Folk Metal,Freestyle,Funeral Doom,Funk Metal,Gospel Choir,Gothic Metal,Grindcore,Groove Metal,Gypsy Jazz,Happy Hardcore,Honky Tonk,Horrorcore,Irish Folk,J-Core,Jazz Rap,Klezmer,Latin Jazz,Lounge,Makina,Mariachi,Mathcore,Merengue,Nerdcore,Norteno,Pagan Metal,Polka,Polka-Punk,Pop Rap,Psychobilly,Riot Grrrl,Rockabilly,Roots Reggae,Samba-Reggae,Schlager,Sean-nós,Shibuya-kei,Skate Punk,Skweee,Soca,Space Ambient,Speedcore,Steampunk,Symphonic Rock,Synthwave,Tango,Tejano,Trap Metal,Twee Pop,Vocal Jazz,Zouk";
+    const GENRE_STRING = "Pop,Indie Pop,Synthwave,Hip-Hop,Trap,R&B,Neo-Soul,Country,Alt-Country,Folk,Indie Folk,Rock,Alt Rock,Dream Pop,Shoegaze,EDM,House,Techno,Drum & Bass,Metal,Punk,Emo,Jazz,Bossa Nova,Reggae,K-Pop,Gospel,Lo-fi,Ambient,Classical Crossover,Hyperpop,Math Rock,Dark Cabaret,Vaporwave,Pirate Metal,Cinematic Orchestral,Spaghetti Western,Acid House,Acid Jazz,Afrobeat,Afropop,Amapiano,Ambient Dub,Art Pop,Art Rock,Avant-Garde Jazz,Baile Funk,Baroque Pop,Big Beat,Black Metal,Bluegrass,Boom Bap,Bossa Nova,Breakbeat,Britpop,Bubblegum Pop,C-Pop,Celtic Punk,Chamber Pop,Chiptune,City Pop,Cloud Rap,Coldwave,Contemporary R&B,Cumbia,Cyberpunk,Dancehall,Dark Ambient,Darkwave,Death Metal,Deep House,Delta Blues,Disco,Doom Metal,Downtempo,Drill,Drone,Dubstep,Electro Swing,Electroclash,Electronic Body Music,Emo Rap,Eurodance,Folk Rock,Folktronica,Free Jazz,Funk,Future Bass,Future Garage,G-Funk,Gabber,Garage Rock,Glitch,Glitch Hop,Goth Rock,Grime,Grunge,Hard Bop,Hardcore Punk,Hardstyle,Heavy Metal,Hyperpop,IDM,Indietronica,Industrial,Italo Disco,J-Pop,J-Rock,Jazz Fusion,Jungle,K-R&B,K-Hip Hop,Krautrock,Latin Pop,Lo-Fi Hip Hop,Math Pop,Melodic Death Metal,Microhouse,Minimal Techno,Motown,Moombahton,Neoclassical,Neo-Psychedelia,New Age,New Wave,No Wave,Noise Rock,Nu Metal,Nu-Disco,Outlaw Country,Phonk,Pop Punk,Post-Bop,Post-Britpop,Post-Hardcore,Post-Punk,Post-Rock,Power Metal,Progressive House,Progressive Metal,Progressive Rock,Psychedelic Rock,Psytrance,Ranchera,Reggaeton,Salsa,Samba,Screamo,Ska,Ska Punk,Sludge Metal,Smooth Jazz,Soft Rock,Soul,Space Rock,Speed Metal,Stoner Rock,Surf Rock,Swamp Pop,Symphonic Metal,Synth-Pop,Tech House,Thrash Metal,Trance,Trip Hop,Tropical House,UK Garage,Viking Metal,Witch House,Worldbeat,Yacht Rock,Zydeco";
     const GENRES = GENRE_STRING.split(",");
     
     const TOPICS = ["Leaving your hometown", "A love that never commits", "Rebuilding after failure", "A friendship fading quietly", "Wanting revenge but choosing peace", "Feeling out of place in your own life", "Missing someone you shouldn’t", "Starting over in secret", "Being addicted to the past", "Chasing a dream that’s changing you", "Talking to your younger self", "A night drive you don’t want to end", "Learning to forgive yourself", "Falling for the wrong person at the right time", "A promise you couldn’t keep", "Growing apart gracefully"];
@@ -140,98 +143,87 @@
       { name:"The Storyteller", verse:"clear articulation, narrative drive", chorus:"anthemic, singalong", bridge:"pause-heavy, honest delivery" }
     ];
     
-    // THE NEW MASSIVE STRUCTURE ARRAY
     const STRUCTURES = [
       { name: "Modern Pop Arc", steps: [["Verse 1", "Scene setting", "Concrete details, one strong image per line."], ["Pre-Chorus", "Tension climb", "Shorten lines, raise urgency, hint the thesis."], ["Chorus", "Thesis + hook", "One clear statement, repeatable phrasing."], ["Verse 2", "Contrast / escalation", "Add a twist, reveal imbalance or regret."], ["Pre-Chorus", "Higher stakes", "Same shape, sharper confession."], ["Chorus", "Bigger payoff", "Add one new line at the end for lift."], ["Bridge", "Perspective flip", "Say one plain truth with no metaphor."], ["Final Chorus", "Expanded hook", "Stack harmonies, extend the last phrase."]] },
       { name: "Alt / Indie Narrative", steps: [["Verse 1", "Place + moment", "Anchor in time/location. Let details do the work."], ["Chorus", "Emotional summary", "Not too literal—one memorable phrase."], ["Verse 2", "Memory replay", "Show the same event from a new angle."], ["Chorus", "Reframe", "Same hook, changed meaning with one new word."], ["Bridge", "Confession", "Drop the ‘cool’—be embarrassingly honest once."], ["Final Chorus", "Resolution", "Either acceptance or refusal. No in-between."]] },
       { name: "Rap / R&B Switch-Up", steps: [["Intro", "Tone-set", "One-liner that defines the vibe."], ["Verse", "Detail + flex", "Specifics, clever images, internal rhyme pockets."], ["Hook", "Sticky mantra", "Short, repeatable, emotionally loaded."], ["Verse 2", "Escalate / reveal", "Add vulnerability or a contradiction."], ["Bridge", "Melodic lift", "Stretch vowels, simplify language, let it breathe."], ["Final Hook", "Harder", "Double the cadence or add ad-libs."]] },
       { name: "The Classic AABA (Jazz/Showtune)", steps: [["Section A1", "Introduce theme", "Establish the core melody and lyrical premise quickly."], ["Section A2", "Reinforce theme", "Same melody, advance the plot or change the setting."], ["Section B (Bridge)", "The Turn", "Completely different chords/melody. Shift perspective or time."], ["Section A3", "Resolution", "Return to the familiar melody, concluding the emotional thought."]] },
-      { name: "EDM Build & Drop", steps: [["Intro", "Atmosphere", "Sparse instrumentation, whispered or highly affected vocal."], ["Verse", "Building energy", "Rhythm speeds up, lyrics become more frantic or urgent."], ["Pre-Drop Build", "Maximum Tension", "Rising pitch, repeating a single powerful phrase over and over."], ["The Drop", "Release", "Minimal to no vocals. Let the production carry the emotion."], ["Outro", "Fade out", "Return to the sparse intro atmosphere, echoing the final word."]] },
-      { name: "Folk Ballad Storyteller", steps: [["Verse 1", "The Setup", "Introduce characters and the core conflict."], ["Chorus", "The Moral", "A timeless, folksy observation about the situation."], ["Verse 2", "The Complication", "Things go wrong. Add a tragic or ironic twist."], ["Chorus", "The Moral Returns", "The same words now carry heavier meaning."], ["Verse 3", "The Aftermath", "Years later, or the final consequence."], ["Outro", "Drifting off", "A single acoustic instrument fading into the wind."]] },
-      { name: "Punk / Hardcore Blitz", steps: [["Intro", "Count off", "Fast, aggressive start. No time to think."], ["Verse 1", "The Grievance", "Shouted vocals, fast tempo, angry observation."], ["Chorus", "The Anthem", "Chanted group vocals, rebellious punchline."], ["Verse 2", "The Escalation", "Shorter than verse 1, double the intensity."], ["Breakdown", "Half-time crush", "Tempo drops by half, extremely heavy, guttural vocal delivery."], ["Outro", "Abrupt stop", "Feedback ring-out. Leave them wanting more."]] },
-      { name: "K-Pop Rollercoaster", steps: [["Intro", "Catchy Signature", "A distinct sound or spoken phrase to brand the song."], ["Verse 1", "Smooth & Sweet", "Clean vocals, setting a confident mood."], ["Rap Verse", "Attitude Shift", "Sudden tempo/beat change, fast rhythmic delivery."], ["Pre-Chorus", "Vocal Flex", "Soaring high notes building immense anticipation."], ["Chorus", "The Ultimate Hook", "Explosive energy, massive synth lines, repetitive sticky phrase."], ["Post-Chorus", "Dance Break", "Heavy beat, single chanted word or non-lexical vocables."], ["Bridge", "Emotional drop", "Stripped back, vulnerable, leading to a massive high note."], ["Final Chorus", "Everything at once", "All layers combined, ad-libs flying everywhere."]] },
-      { name: "Prog Rock Epic", steps: [["Part I: Overture", "Instrumental", "Complex time signature introducing the musical themes."], ["Part II: The Call", "First vocals", "Abstract lyrics dealing with cosmic or philosophical themes."], ["Part III: The Journey", "Shifting sands", "Tempo changes, multiple different verses with no repeated chorus."], ["Part IV: The Battle", "Solo Section", "Dueling instruments, maximum complexity and tension."], ["Part V: Resolution", "Grand finale", "A massive, sweeping chorus that unites all previous themes."]] },
-      { name: "The Slow Burn Arc", steps: [["Intro", "Silence & Space", "Barely there instrumentation, intimate hushed vocal."], ["Verse 1", "Whispered truths", "Short lines, lots of empty space between phrases."], ["Verse 2", "Layering", "Drums enter softly, vocals gain a bit of confidence."], ["Bridge", "The simmer", "Repeating a mantra as instruments slowly swell in volume."], ["The Climax", "Wall of Sound", "Screamed or belted vocals, explosive drums, overwhelming emotion."], ["Outro", "Sudden cut", "Instantly drops back to total silence or a single held note."]] },
-      { name: "Neo-Soul Groove", steps: [["Intro", "Vibe Check", "Complex chord progression, spoken word intro."], ["Verse 1", "Conversational", "Laid back delivery, floating slightly behind the beat."], ["Chorus", "Harmonic bliss", "Thick vocal stacks, smooth and jazzy."], ["Verse 2", "Playful", "More ad-libs, interactive interplay between vocal and bassline."], ["Vamp / Outro", "The Jam", "Repeating the chorus progression while the vocalist improvises runs and scat-sings to fade."]] },
-      { name: "The Two-Part Suite (Beat Switch)", steps: [["Part 1: Verse", "Aggressive", "Fast tempo, attacking the beat, confrontational lyrics."], ["Part 1: Hook", "Hype", "Short, sharp, repetitive."], ["The Switch", "Transition", "Record scratch, beat suddenly slows down and gets moody/ambient."], ["Part 2: Verse", "Introspective", "Slower flow, vulnerable lyrics, looking inward."], ["Part 2: Outro", "Spoken Word", "A philosophical or reflective spoken outro over fading chords."]] }
+      { name: "EDM Build & Drop", steps: [["Intro", "Atmosphere", "Sparse instrumentation, whispered or highly affected vocal."], ["Verse", "Building energy", "Rhythm speeds up, lyrics become more frantic or urgent."], ["Pre-Drop Build", "Maximum Tension", "Rising pitch, repeating a single powerful phrase over and over."], ["The Drop", "Release", "Minimal to no vocals. Let the production carry the emotion."], ["Outro", "Fade out", "Return to the sparse intro atmosphere, echoing the final word."]] }
     ];
 
-    function xmur3(str) {
-      let h = 1779033703 ^ str.length;
-      for (let i = 0; i < str.length; i++) { h = Math.imul(h ^ str.charCodeAt(i), 3432918353); h = (h << 13) | (h >>> 19); }
-      return function() { h = Math.imul(h ^ (h >>> 16), 2246822507); h = Math.imul(h ^ (h >>> 13), 3266489909); return (h ^= h >>> 16) >>> 0; };
-    }
+    function xmur3(str) { let h = 1779033703 ^ str.length; for (let i = 0; i < str.length; i++) { h = Math.imul(h ^ str.charCodeAt(i), 3432918353); h = (h << 13) | (h >>> 19); } return function() { h = Math.imul(h ^ (h >>> 16), 2246822507); h = Math.imul(h ^ (h >>> 13), 3266489909); return (h ^= h >>> 16) >>> 0; }; }
     function mulberry32(a) { return function() { let t = a += 0x6D2B79F5; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
     function makeRng(seedStr){ const seed = seedStr && seedStr.trim() ? seedStr.trim() : String(Date.now()); const a = xmur3(seed)(); return { seed, rand: mulberry32(a) }; }
     function pick(rng, arr){ return arr[Math.floor(rng.rand() * arr.length)]; }
 
+    // --- COMPONENTS ---
     const LockButton = ({ isLocked, onToggle }) => (
-      <button 
-        className={`lock-btn ${isLocked ? 'active' : ''}`} 
-        onClick={onToggle}
-        title={isLocked ? "Unlock this element" : "Lock this element"}
-      >
+      <button className={`lock-btn ${isLocked ? 'active' : ''}`} onClick={onToggle} title={isLocked ? "Unlock" : "Lock"}>
         {isLocked ? '🔒' : '🔓'}
       </button>
     );
 
-    const KeyValue = ({ label, value, lockKey, locks, toggleLock }) => (
-      <div className={`kv ${locks[lockKey] ? 'locked' : ''}`}>
-        <div className="k">
-          {label}
-          <LockButton isLocked={locks[lockKey]} onToggle={() => toggleLock(lockKey)} />
-        </div>
-        <div className="v">{value}</div>
-      </div>
-    );
+    const EditableKeyValue = ({ label, value, lockKey, locks, toggleLock, onEditSave }) => {
+      const [isEditing, setIsEditing] = useState(false);
+      const [tempVal, setTempVal] = useState(value);
 
-    const BlueprintView = ({ bp, locks, toggleLock }) => {
-      if (!bp) return <div className="card-bd"><p style={{color: 'var(--muted)'}}>No blueprint generated yet. Hit Generate!</p></div>;
+      useEffect(() => { setTempVal(value); }, [value]);
+
+      const handleBlur = () => {
+        setIsEditing(false);
+        if (tempVal !== value) {
+          onEditSave(lockKey, tempVal);
+        }
+      };
 
       return (
-        <div className="card-bd" style={{ paddingTop: 0 }}>
-          <div className="blueprint-section">
-            <h3>🌌 The Vibe</h3>
-            <div className="kv-grid">
-              <KeyValue label={`Genres (${GENRES.length} total possible!)`} value={`${bp.genres.primary} + ${bp.genres.secondary} (Flavor)`} lockKey="genres" locks={locks} toggleLock={toggleLock} />
-              <KeyValue label="Optional Musical Context" value={bp.music} lockKey="music" locks={locks} toggleLock={toggleLock} />
-            </div>
+        <div className={`kv ${locks[lockKey] ? 'locked' : ''}`}>
+          <div className="k">
+            {label}
+            <LockButton isLocked={locks[lockKey]} onToggle={() => toggleLock(lockKey)} />
           </div>
+          {isEditing ? (
+            <textarea 
+              autoFocus className="v" value={tempVal} 
+              onChange={(e) => setTempVal(e.target.value)} onBlur={handleBlur}
+              rows={tempVal.split('\n').length || 1}
+            />
+          ) : (
+            <div className="v editable" onClick={() => setIsEditing(true)} title="Click to edit! ✏️">{value}</div>
+          )}
+        </div>
+      );
+    };
 
-          <div className="blueprint-section">
-            <h3>🫀 The Core</h3>
-            <div className="kv-grid">
-              <KeyValue label="Topic" value={bp.topic} lockKey="topic" locks={locks} toggleLock={toggleLock} />
-              <KeyValue label="Emotion (Surface / Core)" value={`${bp.emotion.surface} / ${bp.emotion.core}`} lockKey="emotion" locks={locks} toggleLock={toggleLock} />
-              <KeyValue label="Imagery Theme" value={bp.imagery} lockKey="imagery" locks={locks} toggleLock={toggleLock} />
-            </div>
-          </div>
+    const EditableStep = ({ step, index, onStepEditSave }) => {
+      const [name, hint, desc] = step;
+      const [isEditing, setIsEditing] = useState(false);
+      const [tempDesc, setTempDesc] = useState(desc);
 
-          <div className="blueprint-section">
-            <h3>🗣️ The Voice</h3>
-            <div className="kv-grid">
-              <KeyValue label="Rhyme & Diction" value={bp.rhyme} lockKey="rhyme" locks={locks} toggleLock={toggleLock} />
-              <KeyValue label="Vocal Direction" value={`${bp.vocal.name}\nVerse: ${bp.vocal.verse}\nChorus: ${bp.vocal.chorus}\nBridge: ${bp.vocal.bridge}`} lockKey="vocal" locks={locks} toggleLock={toggleLock} />
-            </div>
-          </div>
+      useEffect(() => { setTempDesc(desc); }, [desc]);
 
-          <div className={`blueprint-section ${locks.structure ? 'locked' : ''}`}>
-            <h3>
-              🏗️ The Structure: {bp.structure.name}
-              <LockButton isLocked={locks.structure} onToggle={() => toggleLock('structure')} />
-            </h3>
-            <div className="structure-list">
-              {bp.structure.steps.map(([name, hint, desc], i) => (
-                <div key={i} className="step">
-                  <div className="step-hd">
-                    <span className="step-name">{name}</span>
-                    <span className="step-hint">{hint}</span>
-                  </div>
-                  <div className="step-desc">{desc}</div>
-                </div>
-              ))}
-            </div>
+      const handleBlur = () => {
+        setIsEditing(false);
+        if (tempDesc !== desc) {
+          onStepEditSave(index, tempDesc);
+        }
+      };
+
+      return (
+        <div className="step">
+          <div className="step-hd">
+            <span className="step-name">{name}</span>
+            <span className="step-hint">{hint}</span>
           </div>
+          {isEditing ? (
+            <textarea 
+              autoFocus className="step-desc" value={tempDesc} 
+              onChange={(e) => setTempDesc(e.target.value)} onBlur={handleBlur}
+              rows={tempDesc.split('\n').length || 1}
+            />
+          ) : (
+            <div className="step-desc editable" onClick={() => setIsEditing(true)} title="Click to edit! ✏️">{desc}</div>
+          )}
         </div>
       );
     };
@@ -248,23 +240,42 @@
         imagery: false, rhyme: false, vocal: false, structure: false
       });
 
-      const toggleLock = (key) => {
-        setLocks(prev => ({ ...prev, [key]: !prev[key] }));
-      };
-
-      useEffect(() => {
-        try {
-          const loaded = JSON.parse(localStorage.getItem("lyricalchemy_saves_v4") || "[]");
-          setSaves(loaded);
-        } catch (e) { console.error("Could not load saves", e); }
-      }, []);
-
-      useEffect(() => { handleGenerate(true); }, []); 
+      const toggleLock = (key) => setLocks(prev => ({ ...prev, [key]: !prev[key] }));
 
       const showToast = (msg) => {
         setToastMsg({ text: msg, visible: true });
         setTimeout(() => setToastMsg(prev => ({ ...prev, visible: false })), 2000);
       };
+
+      // Custom Edit Handlers
+      const handleOverrideSave = (key, customText) => {
+        setCurrentBp(prev => ({
+          ...prev,
+          overrides: { ...(prev.overrides || {}), [key]: customText }
+        }));
+        setLocks(prev => ({ ...prev, [key]: true })); // Auto-lock!
+        showToast("Custom edit locked! 🔒✨");
+      };
+
+      const handleStructureStepEdit = (stepIndex, newDesc) => {
+        const newSteps = [...currentBp.structure.steps];
+        newSteps[stepIndex] = [newSteps[stepIndex][0], newSteps[stepIndex][1], newDesc];
+        
+        setCurrentBp(prev => ({
+          ...prev,
+          structure: { ...prev.structure, steps: newSteps }
+        }));
+        setLocks(prev => ({ ...prev, structure: true })); // Auto-lock!
+        showToast("Structure edit locked! 🔒✨");
+      };
+
+      useEffect(() => {
+        try {
+          const loaded = JSON.parse(localStorage.getItem("lyricalchemy_saves_v5") || "[]");
+          setSaves(loaded);
+        } catch (e) { console.error("Could not load saves", e); }
+        handleGenerate(true);
+      }, []); 
 
       const handleGenerate = (isInitial = false) => {
         const { seed, rand } = makeRng(seedInput);
@@ -272,12 +283,16 @@
 
         const shouldLock = (key) => !isInitial && currentBp && locks[key];
 
+        // Clean up overrides if they were unlocked before generating
+        const activeOverrides = {};
+        if (!isInitial && currentBp?.overrides) {
+          Object.keys(currentBp.overrides).forEach(k => {
+            if (locks[k]) activeOverrides[k] = currentBp.overrides[k];
+          });
+        }
+
         const newBp = {
-          seed,
-          chaos,
-          mode: chaos <= 25 ? "Studio" : chaos <= 60 ? "Hybrid" : "Experimental",
-          createdAt: new Date().toISOString(),
-          
+          seed, chaos, mode: chaos <= 25 ? "Studio" : chaos <= 60 ? "Hybrid" : "Experimental", createdAt: new Date().toISOString(),
           genres: shouldLock('genres') ? currentBp.genres : { primary: pick(rng, GENRES), secondary: pick(rng, GENRES) },
           topic: shouldLock('topic') ? currentBp.topic : pick(rng, TOPICS),
           emotion: shouldLock('emotion') ? currentBp.emotion : { surface: pick(rng, EMOTIONS), core: pick(rng, EMOTIONS) },
@@ -285,7 +300,8 @@
           rhyme: shouldLock('rhyme') ? currentBp.rhyme : pick(rng, RHYME),
           vocal: shouldLock('vocal') ? currentBp.vocal : pick(rng, VOCAL_ARCHETYPES),
           structure: shouldLock('structure') ? currentBp.structure : pick(rng, STRUCTURES),
-          music: shouldLock('music') ? currentBp.music : `Tempo: ${pick(rng, [90, 105, 120, 140, 170])} BPM\nKey: ${pick(rng, ["C Minor", "G Major", "E Minor", "A Minor"])}\nPalette: Abstract, Textural, Reverb-heavy`
+          music: shouldLock('music') ? currentBp.music : `Tempo: ${pick(rng, [90, 105, 120, 140, 170])} BPM\nKey: ${pick(rng, ["C Minor", "G Major", "E Minor", "A Minor"])}\nPalette: Abstract, Textural, Reverb-heavy`,
+          overrides: activeOverrides
         };
 
         setCurrentBp(newBp);
@@ -293,58 +309,29 @@
 
       const handleSave = () => {
         if (!currentBp) return showToast("Generate first! 🎲");
-        const exists = saves.some(s => s.seed === currentBp.seed && s.topic === currentBp.topic);
-        if (exists) return showToast("Already saved! 😄");
-        
         const newSaves = [currentBp, ...saves];
         setSaves(newSaves);
-        localStorage.setItem("lyricalchemy_saves_v4", JSON.stringify(newSaves));
+        localStorage.setItem("lyricalchemy_saves_v5", JSON.stringify(newSaves));
         showToast("Saved to Studio ✨");
       };
 
-      const handleDeleteSave = (idx) => {
-        const newSaves = [...saves];
-        newSaves.splice(idx, 1);
-        setSaves(newSaves);
-        localStorage.setItem("lyricalchemy_saves_v4", JSON.stringify(newSaves));
-        showToast("Deleted 🗑️");
-      };
-
-      const handleClearSaves = () => {
-        setSaves([]);
-        localStorage.removeItem("lyricalchemy_saves_v4");
-        showToast("Cleared all saves 🗑️");
-      };
-
       const handleLoad = (bp) => {
-        setCurrentBp(bp);
-        setSeedInput(bp.seed);
-        setChaos(bp.chaos);
+        setCurrentBp(bp); setSeedInput(bp.seed); setChaos(bp.chaos);
         showToast("Loaded blueprint 📥");
       };
 
-      const handleExport = () => {
-        if (!currentBp) return;
-        const blob = new Blob([JSON.stringify(currentBp, null, 2)], { type: "application/json" });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = `LyricAlchemy_${currentBp.seed}.json`;
-        a.click();
-        URL.revokeObjectURL(url);
-        showToast("Exported JSON 📤");
-      };
+      const getVal = (key, defaultVal) => currentBp?.overrides?.[key] !== undefined ? currentBp.overrides[key] : defaultVal;
 
       return (
         <div className="wrap">
           <header>
             <div className="brand">
               <h1>LyricAlchemy ✨</h1>
-              <p>Lock your favorites, re-roll the rest. {GENRES.length} genres & {STRUCTURES.length} structures inside.</p>
+              <p>Lock it, type over it, roll the rest. You have the controls.</p>
             </div>
             <div className="pillrow">
-              <div className="pill">Seed: <b>{currentBp ? currentBp.seed : "—"}</b></div>
-              <div className="pill">Mode: <b>{currentBp ? currentBp.mode : "—"}</b></div>
+              <div className="pill">Seed: <b>{currentBp?.seed || "—"}</b></div>
+              <div className="pill">Mode: <b>{currentBp?.mode || "—"}</b></div>
             </div>
           </header>
 
@@ -355,7 +342,6 @@
                 <div className="row">
                   <button className="primary" onClick={() => handleGenerate(false)}>🎲 Generate</button>
                   <button className="small" onClick={handleSave}>💾 Save</button>
-                  <button className="small" onClick={handleExport}>📤 Export</button>
                 </div>
               </div>
               
@@ -371,33 +357,68 @@
                   </label>
                 </div>
                 <div style={{ marginTop: '16px', fontSize: '12px', color: 'var(--accent-gold)', display: 'flex', gap: '8px', alignItems: 'center' }}>
-                  <span>💡</span> <i>Click the 🔓 icons below to lock specific elements before generating!</i>
+                  <span>💡</span> <i>Click ANY text box below to type your own idea. We'll automatically lock it for you!</i>
                 </div>
               </div>
 
-              <BlueprintView bp={currentBp} locks={locks} toggleLock={toggleLock} />
+              {currentBp && (
+                <div className="card-bd" style={{ paddingTop: 0 }}>
+                  <div className="blueprint-section">
+                    <h3>🌌 The Vibe</h3>
+                    <div className="kv-grid">
+                      <EditableKeyValue label="Genres" value={getVal('genres', `${currentBp.genres.primary} + ${currentBp.genres.secondary} (Flavor)`)} lockKey="genres" locks={locks} toggleLock={toggleLock} onEditSave={handleOverrideSave} />
+                      <EditableKeyValue label="Optional Musical Context" value={getVal('music', currentBp.music)} lockKey="music" locks={locks} toggleLock={toggleLock} onEditSave={handleOverrideSave} />
+                    </div>
+                  </div>
+
+                  <div className="blueprint-section">
+                    <h3>🫀 The Core</h3>
+                    <div className="kv-grid">
+                      <EditableKeyValue label="Topic" value={getVal('topic', currentBp.topic)} lockKey="topic" locks={locks} toggleLock={toggleLock} onEditSave={handleOverrideSave} />
+                      <EditableKeyValue label="Emotion (Surface / Core)" value={getVal('emotion', `${currentBp.emotion.surface} / ${currentBp.emotion.core}`)} lockKey="emotion" locks={locks} toggleLock={toggleLock} onEditSave={handleOverrideSave} />
+                      <EditableKeyValue label="Imagery Theme" value={getVal('imagery', currentBp.imagery)} lockKey="imagery" locks={locks} toggleLock={toggleLock} onEditSave={handleOverrideSave} />
+                    </div>
+                  </div>
+
+                  <div className="blueprint-section">
+                    <h3>🗣️ The Voice</h3>
+                    <div className="kv-grid">
+                      <EditableKeyValue label="Rhyme & Diction" value={getVal('rhyme', currentBp.rhyme)} lockKey="rhyme" locks={locks} toggleLock={toggleLock} onEditSave={handleOverrideSave} />
+                      <EditableKeyValue label="Vocal Direction" value={getVal('vocal', `${currentBp.vocal.name}\nVerse: ${currentBp.vocal.verse}\nChorus: ${currentBp.vocal.chorus}\nBridge: ${currentBp.vocal.bridge}`)} lockKey="vocal" locks={locks} toggleLock={toggleLock} onEditSave={handleOverrideSave} />
+                    </div>
+                  </div>
+
+                  <div className={`blueprint-section ${locks.structure ? 'locked' : ''}`}>
+                    <h3>
+                      🏗️ The Structure: {currentBp.structure.name}
+                      <LockButton isLocked={locks.structure} onToggle={() => toggleLock('structure')} />
+                    </h3>
+                    <div className="structure-list">
+                      {currentBp.structure.steps.map((step, i) => (
+                        <EditableStep key={i} step={step} index={i} onStepEditSave={handleStructureStepEdit} />
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
             </section>
 
             <aside className="glass-panel" style={{ alignSelf: 'start' }}>
               <div className="card-hd">
                 <h2>Saved Blueprints</h2>
-                {saves.length > 0 && <button className="small danger" onClick={handleClearSaves}>Clear</button>}
+                {saves.length > 0 && <button className="small danger" onClick={() => { setSaves([]); localStorage.removeItem("lyricalchemy_saves_v5"); showToast("Cleared 🗑️"); }}>Clear</button>}
               </div>
               <div className="card-bd">
                 {saves.length === 0 ? (
-                  <p style={{ color: "var(--muted)", fontSize: "14px" }}>Nothing saved yet. Hit <b>Save</b> to keep your favorite ideas here.</p>
+                  <p style={{ color: "var(--muted)", fontSize: "14px" }}>Nothing saved yet.</p>
                 ) : (
                   <div className="saved-list">
                     {saves.map((bp, i) => (
                       <div key={i} className="fav">
-                        <div className="fav-title">{bp.genres.primary} — {bp.topic}</div>
-                        <div className="fav-meta">
-                          <span>Seed: {bp.seed}</span> • <span>{bp.emotion.surface}/{bp.emotion.core}</span>
-                        </div>
+                        <div className="fav-title">{bp.overrides?.genres || bp.genres.primary}</div>
+                        <div className="fav-meta"><span>Seed: {bp.seed}</span></div>
                         <div className="fav-actions">
                           <button className="small" onClick={() => handleLoad(bp)}>📥 Load</button>
-                          <button className="small" onClick={() => { navigator.clipboard.writeText(JSON.stringify(bp, null, 2)); showToast("Copied! 📋"); }}>📋 Copy JSON</button>
-                          <button className="small danger" onClick={() => handleDeleteSave(i)}>🗑️</button>
                         </div>
                       </div>
                     ))}
@@ -406,7 +427,6 @@
               </div>
             </aside>
           </div>
-
           <div className={`toast ${toastMsg.visible ? 'show' : ''}`}>{toastMsg.text}</div>
         </div>
       );
