@@ -125,12 +125,9 @@
   <script type="text/babel">
     const { useState, useEffect } = React;
 
-    // --- MASSIVE GENRE MEGA-STRING ---
-    // Contains hundreds of genres, sub-genres, global styles, and weird fusions to hit that massive scale.
     const GENRE_STRING = "Pop,Indie Pop,Synthwave,Hip-Hop,Trap,R&B,Neo-Soul,Country,Alt-Country,Folk,Indie Folk,Rock,Alt Rock,Dream Pop,Shoegaze,EDM,House,Techno,Drum & Bass,Metal,Punk,Emo,Jazz,Bossa Nova,Reggae,K-Pop,Gospel,Lo-fi,Ambient,Classical Crossover,Hyperpop,Math Rock,Dark Cabaret,Vaporwave,Pirate Metal,Cinematic Orchestral,Spaghetti Western,Acid House,Acid Jazz,Afrobeat,Afropop,Amapiano,Ambient Dub,Art Pop,Art Rock,Avant-Garde Jazz,Baile Funk,Baroque Pop,Big Beat,Black Metal,Bluegrass,Boom Bap,Bossa Nova,Breakbeat,Britpop,Bubblegum Pop,C-Pop,Celtic Punk,Chamber Pop,Chiptune,City Pop,Cloud Rap,Coldwave,Contemporary R&B,Cumbia,Cyberpunk,Dancehall,Dark Ambient,Darkwave,Death Metal,Deep House,Delta Blues,Disco,Doom Metal,Downtempo,Drill,Drone,Dubstep,Electro Swing,Electroclash,Electronic Body Music,Emo Rap,Eurodance,Folk Rock,Folktronica,Free Jazz,Funk,Future Bass,Future Garage,G-Funk,Gabber,Garage Rock,Glitch,Glitch Hop,Goth Rock,Grime,Grunge,Hard Bop,Hardcore Punk,Hardstyle,Heavy Metal,Hyperpop,IDM,Indietronica,Industrial,Italo Disco,J-Pop,J-Rock,Jazz Fusion,Jungle,K-R&B,K-Hip Hop,Krautrock,Latin Pop,Lo-Fi Hip Hop,Math Pop,Melodic Death Metal,Microhouse,Minimal Techno,Motown,Moombahton,Neoclassical,Neo-Psychedelia,New Age,New Wave,No Wave,Noise Rock,Nu Metal,Nu-Disco,Outlaw Country,Phonk,Pop Punk,Post-Bop,Post-Britpop,Post-Hardcore,Post-Punk,Post-Rock,Power Metal,Progressive House,Progressive Metal,Progressive Rock,Psychedelic Rock,Psytrance,Ranchera,Reggaeton,Salsa,Samba,Screamo,Ska,Ska Punk,Sludge Metal,Smooth Jazz,Soft Rock,Soul,Space Rock,Speed Metal,Stoner Rock,Surf Rock,Swamp Pop,Symphonic Metal,Synth-Pop,Tech House,Thrash Metal,Trance,Trip Hop,Tropical House,UK Garage,Viking Metal,Witch House,Worldbeat,Yacht Rock,Zydeco,Acappella,Acoustic Blues,Arena Rock,Bhangra,Boombahton,Bulerias,Calypso,Chansons,Choral,Cowpunk,Crust Punk,Dance-Punk,Dark Synth,Deathcore,Dixieland,Doo-wop,Dream Trance,Electro,Flamenco,Folk Metal,Freestyle,Funeral Doom,Funk Metal,Gospel Choir,Gothic Metal,Grindcore,Groove Metal,Gypsy Jazz,Happy Hardcore,Honky Tonk,Horrorcore,Irish Folk,J-Core,Jazz Rap,Klezmer,Latin Jazz,Lounge,Makina,Mariachi,Mathcore,Merengue,Nerdcore,Norteno,Pagan Metal,Polka,Polka-Punk,Pop Rap,Psychobilly,Riot Grrrl,Rockabilly,Roots Reggae,Samba-Reggae,Schlager,Sean-nós,Shibuya-kei,Skate Punk,Skweee,Soca,Space Ambient,Speedcore,Steampunk,Symphonic Rock,Synthwave,Tango,Tejano,Trap Metal,Twee Pop,Vocal Jazz,Zouk";
     const GENRES = GENRE_STRING.split(",");
     
-    // --- STANDARD DATA ---
     const TOPICS = ["Leaving your hometown", "A love that never commits", "Rebuilding after failure", "A friendship fading quietly", "Wanting revenge but choosing peace", "Feeling out of place in your own life", "Missing someone you shouldn’t", "Starting over in secret", "Being addicted to the past", "Chasing a dream that’s changing you", "Talking to your younger self", "A night drive you don’t want to end", "Learning to forgive yourself", "Falling for the wrong person at the right time", "A promise you couldn’t keep", "Growing apart gracefully"];
     const EMOTIONS = ["Nostalgia", "Hope", "Resentment", "Longing", "Confidence", "Guilt", "Yearning", "Relief", "Regret", "Defiance", "Tenderness", "Jealousy", "Awe", "Grief", "Calm", "Restlessness"];
     const IMAGERY = ["Fading summer light", "Neon reflections on wet pavement", "Dusty photos in a drawer", "Cold air in an empty room", "A cigarette burning down unnoticed", "Motel curtains at sunrise", "Ocean salt on skin", "Train stations and missed calls", "Streetlights flickering", "Snow falling on quiet streets", "A cracked phone screen", "Warm kitchen lamplight"];
@@ -142,10 +139,21 @@
       { name:"The Villain", verse:"low and controlled, theatrical", chorus:"dramatic lift, sharp dynamics", bridge:"cold whisper → sudden snap" },
       { name:"The Storyteller", verse:"clear articulation, narrative drive", chorus:"anthemic, singalong", bridge:"pause-heavy, honest delivery" }
     ];
+    
+    // THE NEW MASSIVE STRUCTURE ARRAY
     const STRUCTURES = [
       { name: "Modern Pop Arc", steps: [["Verse 1", "Scene setting", "Concrete details, one strong image per line."], ["Pre-Chorus", "Tension climb", "Shorten lines, raise urgency, hint the thesis."], ["Chorus", "Thesis + hook", "One clear statement, repeatable phrasing."], ["Verse 2", "Contrast / escalation", "Add a twist, reveal imbalance or regret."], ["Pre-Chorus", "Higher stakes", "Same shape, sharper confession."], ["Chorus", "Bigger payoff", "Add one new line at the end for lift."], ["Bridge", "Perspective flip", "Say one plain truth with no metaphor."], ["Final Chorus", "Expanded hook", "Stack harmonies, extend the last phrase."]] },
       { name: "Alt / Indie Narrative", steps: [["Verse 1", "Place + moment", "Anchor in time/location. Let details do the work."], ["Chorus", "Emotional summary", "Not too literal—one memorable phrase."], ["Verse 2", "Memory replay", "Show the same event from a new angle."], ["Chorus", "Reframe", "Same hook, changed meaning with one new word."], ["Bridge", "Confession", "Drop the ‘cool’—be embarrassingly honest once."], ["Final Chorus", "Resolution", "Either acceptance or refusal. No in-between."]] },
-      { name: "Rap / R&B Switch-Up", steps: [["Intro", "Tone-set", "One-liner that defines the vibe."], ["Verse", "Detail + flex", "Specifics, clever images, internal rhyme pockets."], ["Hook", "Sticky mantra", "Short, repeatable, emotionally loaded."], ["Verse 2", "Escalate / reveal", "Add vulnerability or a contradiction."], ["Bridge", "Melodic lift", "Stretch vowels, simplify language, let it breathe."], ["Final Hook", "Harder", "Double the cadence or add ad-libs."]] }
+      { name: "Rap / R&B Switch-Up", steps: [["Intro", "Tone-set", "One-liner that defines the vibe."], ["Verse", "Detail + flex", "Specifics, clever images, internal rhyme pockets."], ["Hook", "Sticky mantra", "Short, repeatable, emotionally loaded."], ["Verse 2", "Escalate / reveal", "Add vulnerability or a contradiction."], ["Bridge", "Melodic lift", "Stretch vowels, simplify language, let it breathe."], ["Final Hook", "Harder", "Double the cadence or add ad-libs."]] },
+      { name: "The Classic AABA (Jazz/Showtune)", steps: [["Section A1", "Introduce theme", "Establish the core melody and lyrical premise quickly."], ["Section A2", "Reinforce theme", "Same melody, advance the plot or change the setting."], ["Section B (Bridge)", "The Turn", "Completely different chords/melody. Shift perspective or time."], ["Section A3", "Resolution", "Return to the familiar melody, concluding the emotional thought."]] },
+      { name: "EDM Build & Drop", steps: [["Intro", "Atmosphere", "Sparse instrumentation, whispered or highly affected vocal."], ["Verse", "Building energy", "Rhythm speeds up, lyrics become more frantic or urgent."], ["Pre-Drop Build", "Maximum Tension", "Rising pitch, repeating a single powerful phrase over and over."], ["The Drop", "Release", "Minimal to no vocals. Let the production carry the emotion."], ["Outro", "Fade out", "Return to the sparse intro atmosphere, echoing the final word."]] },
+      { name: "Folk Ballad Storyteller", steps: [["Verse 1", "The Setup", "Introduce characters and the core conflict."], ["Chorus", "The Moral", "A timeless, folksy observation about the situation."], ["Verse 2", "The Complication", "Things go wrong. Add a tragic or ironic twist."], ["Chorus", "The Moral Returns", "The same words now carry heavier meaning."], ["Verse 3", "The Aftermath", "Years later, or the final consequence."], ["Outro", "Drifting off", "A single acoustic instrument fading into the wind."]] },
+      { name: "Punk / Hardcore Blitz", steps: [["Intro", "Count off", "Fast, aggressive start. No time to think."], ["Verse 1", "The Grievance", "Shouted vocals, fast tempo, angry observation."], ["Chorus", "The Anthem", "Chanted group vocals, rebellious punchline."], ["Verse 2", "The Escalation", "Shorter than verse 1, double the intensity."], ["Breakdown", "Half-time crush", "Tempo drops by half, extremely heavy, guttural vocal delivery."], ["Outro", "Abrupt stop", "Feedback ring-out. Leave them wanting more."]] },
+      { name: "K-Pop Rollercoaster", steps: [["Intro", "Catchy Signature", "A distinct sound or spoken phrase to brand the song."], ["Verse 1", "Smooth & Sweet", "Clean vocals, setting a confident mood."], ["Rap Verse", "Attitude Shift", "Sudden tempo/beat change, fast rhythmic delivery."], ["Pre-Chorus", "Vocal Flex", "Soaring high notes building immense anticipation."], ["Chorus", "The Ultimate Hook", "Explosive energy, massive synth lines, repetitive sticky phrase."], ["Post-Chorus", "Dance Break", "Heavy beat, single chanted word or non-lexical vocables."], ["Bridge", "Emotional drop", "Stripped back, vulnerable, leading to a massive high note."], ["Final Chorus", "Everything at once", "All layers combined, ad-libs flying everywhere."]] },
+      { name: "Prog Rock Epic", steps: [["Part I: Overture", "Instrumental", "Complex time signature introducing the musical themes."], ["Part II: The Call", "First vocals", "Abstract lyrics dealing with cosmic or philosophical themes."], ["Part III: The Journey", "Shifting sands", "Tempo changes, multiple different verses with no repeated chorus."], ["Part IV: The Battle", "Solo Section", "Dueling instruments, maximum complexity and tension."], ["Part V: Resolution", "Grand finale", "A massive, sweeping chorus that unites all previous themes."]] },
+      { name: "The Slow Burn Arc", steps: [["Intro", "Silence & Space", "Barely there instrumentation, intimate hushed vocal."], ["Verse 1", "Whispered truths", "Short lines, lots of empty space between phrases."], ["Verse 2", "Layering", "Drums enter softly, vocals gain a bit of confidence."], ["Bridge", "The simmer", "Repeating a mantra as instruments slowly swell in volume."], ["The Climax", "Wall of Sound", "Screamed or belted vocals, explosive drums, overwhelming emotion."], ["Outro", "Sudden cut", "Instantly drops back to total silence or a single held note."]] },
+      { name: "Neo-Soul Groove", steps: [["Intro", "Vibe Check", "Complex chord progression, spoken word intro."], ["Verse 1", "Conversational", "Laid back delivery, floating slightly behind the beat."], ["Chorus", "Harmonic bliss", "Thick vocal stacks, smooth and jazzy."], ["Verse 2", "Playful", "More ad-libs, interactive interplay between vocal and bassline."], ["Vamp / Outro", "The Jam", "Repeating the chorus progression while the vocalist improvises runs and scat-sings to fade."]] },
+      { name: "The Two-Part Suite (Beat Switch)", steps: [["Part 1: Verse", "Aggressive", "Fast tempo, attacking the beat, confrontational lyrics."], ["Part 1: Hook", "Hype", "Short, sharp, repetitive."], ["The Switch", "Transition", "Record scratch, beat suddenly slows down and gets moody/ambient."], ["Part 2: Verse", "Introspective", "Slower flow, vulnerable lyrics, looking inward."], ["Part 2: Outro", "Spoken Word", "A philosophical or reflective spoken outro over fading chords."]] }
     ];
 
     function xmur3(str) {
@@ -157,7 +165,6 @@
     function makeRng(seedStr){ const seed = seedStr && seedStr.trim() ? seedStr.trim() : String(Date.now()); const a = xmur3(seed)(); return { seed, rand: mulberry32(a) }; }
     function pick(rng, arr){ return arr[Math.floor(rng.rand() * arr.length)]; }
 
-    // --- COMPONENTS ---
     const LockButton = ({ isLocked, onToggle }) => (
       <button 
         className={`lock-btn ${isLocked ? 'active' : ''}`} 
@@ -236,7 +243,6 @@
       const [saves, setSaves] = useState([]);
       const [toastMsg, setToastMsg] = useState({ text: "", visible: false });
 
-      // NEW: State to track which elements are locked
       const [locks, setLocks] = useState({
         genres: false, music: false, topic: false, emotion: false, 
         imagery: false, rhyme: false, vocal: false, structure: false
@@ -248,12 +254,12 @@
 
       useEffect(() => {
         try {
-          const loaded = JSON.parse(localStorage.getItem("lyricalchemy_saves_v3") || "[]");
+          const loaded = JSON.parse(localStorage.getItem("lyricalchemy_saves_v4") || "[]");
           setSaves(loaded);
         } catch (e) { console.error("Could not load saves", e); }
       }, []);
 
-      useEffect(() => { handleGenerate(true); }, []); // Initial boot
+      useEffect(() => { handleGenerate(true); }, []); 
 
       const showToast = (msg) => {
         setToastMsg({ text: msg, visible: true });
@@ -264,7 +270,6 @@
         const { seed, rand } = makeRng(seedInput);
         const rng = { seed, rand };
 
-        // Helper to check if we should keep the current value
         const shouldLock = (key) => !isInitial && currentBp && locks[key];
 
         const newBp = {
@@ -293,7 +298,7 @@
         
         const newSaves = [currentBp, ...saves];
         setSaves(newSaves);
-        localStorage.setItem("lyricalchemy_saves_v3", JSON.stringify(newSaves));
+        localStorage.setItem("lyricalchemy_saves_v4", JSON.stringify(newSaves));
         showToast("Saved to Studio ✨");
       };
 
@@ -301,13 +306,13 @@
         const newSaves = [...saves];
         newSaves.splice(idx, 1);
         setSaves(newSaves);
-        localStorage.setItem("lyricalchemy_saves_v3", JSON.stringify(newSaves));
+        localStorage.setItem("lyricalchemy_saves_v4", JSON.stringify(newSaves));
         showToast("Deleted 🗑️");
       };
 
       const handleClearSaves = () => {
         setSaves([]);
-        localStorage.removeItem("lyricalchemy_saves_v3");
+        localStorage.removeItem("lyricalchemy_saves_v4");
         showToast("Cleared all saves 🗑️");
       };
 
@@ -335,7 +340,7 @@
           <header>
             <div className="brand">
               <h1>LyricAlchemy ✨</h1>
-              <p>Lock your favorites, re-roll the rest. {GENRES.length} genres inside.</p>
+              <p>Lock your favorites, re-roll the rest. {GENRES.length} genres & {STRUCTURES.length} structures inside.</p>
             </div>
             <div className="pillrow">
               <div className="pill">Seed: <b>{currentBp ? currentBp.seed : "—"}</b></div>
