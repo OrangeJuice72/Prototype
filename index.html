@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>LyricAlchemy — Studio Edition</title>
+  <title>LyricAlchemy — Lock & Chaos Edition</title>
   
   <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
@@ -46,7 +46,6 @@
 
     .wrap { width: min(1200px, 100%); }
 
-    /* Glassmorphic Utilities */
     .glass-panel {
       background: var(--glass);
       backdrop-filter: blur(24px);
@@ -58,156 +57,65 @@
       transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
 
-    header {
-      display: flex;
-      align-items: flex-end;
-      justify-content: space-between;
-      gap: 20px;
-      margin-bottom: 30px;
-      flex-wrap: wrap;
-    }
-
-    .brand h1 {
-      font-size: 28px;
-      letter-spacing: -0.5px;
-      background: linear-gradient(135deg, #fff, var(--accent-purple));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      margin-bottom: 4px;
-    }
-
+    header { display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; margin-bottom: 30px; flex-wrap: wrap; }
+    .brand h1 { font-size: 28px; letter-spacing: -0.5px; background: linear-gradient(135deg, #fff, var(--accent-purple)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 4px; }
     .brand p { color: var(--muted); font-size: 14px; }
-
     .pillrow { display: flex; gap: 12px; flex-wrap: wrap; }
-    
-    .pill {
-      background: rgba(255,255,255,0.03);
-      border: 1px solid var(--line);
-      border-radius: 999px;
-      padding: 6px 14px;
-      font-size: 12px;
-      color: var(--muted);
-      display: flex; gap: 8px; align-items: center;
-      backdrop-filter: blur(10px);
-    }
+    .pill { background: rgba(255,255,255,0.03); border: 1px solid var(--line); border-radius: 999px; padding: 6px 14px; font-size: 12px; color: var(--muted); display: flex; gap: 8px; align-items: center; backdrop-filter: blur(10px); }
     .pill b { color: var(--text); font-weight: 600; }
 
     .grid { display: grid; grid-template-columns: 1.3fr 0.7fr; gap: 24px; }
-    
-    @media (max-width: 980px) {
-      .grid { grid-template-columns: 1fr; }
-      header { flex-direction: column; align-items: flex-start; }
-    }
+    @media (max-width: 980px) { .grid { grid-template-columns: 1fr; } header { flex-direction: column; align-items: flex-start; } }
 
-    .card-hd {
-      padding: 20px 24px;
-      display: flex; align-items: center; justify-content: space-between; gap: 16px;
-      border-bottom: 1px solid var(--line);
-      background: linear-gradient(180deg, rgba(255,255,255,0.03), transparent);
-      flex-wrap: wrap;
-    }
-    
+    .card-hd { padding: 20px 24px; display: flex; align-items: center; justify-content: space-between; gap: 16px; border-bottom: 1px solid var(--line); background: linear-gradient(180deg, rgba(255,255,255,0.03), transparent); flex-wrap: wrap; }
     .card-hd h2 { font-size: 16px; font-weight: 600; letter-spacing: 0.5px; }
-    
     .card-bd { padding: 24px; }
-
     .row { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
 
-    /* Buttons */
-    button {
-      appearance: none;
-      background: rgba(255,255,255,0.05);
-      border: 1px solid var(--line);
-      color: var(--text);
-      border-radius: 12px;
-      padding: 10px 16px;
-      font-size: 13px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-    }
+    button { appearance: none; background: rgba(255,255,255,0.05); border: 1px solid var(--line); color: var(--text); border-radius: 12px; padding: 10px 16px; font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.2s ease; }
     button:hover { background: rgba(255,255,255,0.1); transform: translateY(-1px); }
     button:active { transform: translateY(1px) scale(0.98); }
-    
-    .primary {
-      background: linear-gradient(135deg, rgba(179,140,255,0.4), rgba(179,140,255,0.1));
-      border-color: rgba(179,140,255,0.5);
-      box-shadow: 0 4px 15px rgba(179,140,255,0.2);
-    }
+    .primary { background: linear-gradient(135deg, rgba(179,140,255,0.4), rgba(179,140,255,0.1)); border-color: rgba(179,140,255,0.5); box-shadow: 0 4px 15px rgba(179,140,255,0.2); }
     .primary:hover { border-color: var(--accent-purple); background: linear-gradient(135deg, rgba(179,140,255,0.5), rgba(179,140,255,0.2)); }
-    
     .danger { background: rgba(255,107,136,0.1); border-color: rgba(255,107,136,0.3); color: var(--danger); }
     .danger:hover { background: rgba(255,107,136,0.2); border-color: var(--danger); }
-    
     .small { padding: 8px 12px; font-size: 12px; }
 
-    /* Inputs */
     label { font-size: 12px; color: var(--muted); display: flex; flex-direction: column; gap: 8px; flex: 1; min-width: 200px; }
-    input[type="text"], input[type="range"] {
-      width: 100%; padding: 12px 16px; border-radius: 12px;
-      border: 1px solid var(--line); background: rgba(0,0,0,0.3);
-      color: var(--text); outline: none; transition: border 0.2s ease, box-shadow 0.2s ease;
-    }
-    input[type="text"]:focus {
-      border-color: var(--accent-purple); box-shadow: 0 0 0 3px rgba(179,140,255,0.15);
-    }
+    input[type="text"], input[type="range"] { width: 100%; padding: 12px 16px; border-radius: 12px; border: 1px solid var(--line); background: rgba(0,0,0,0.3); color: var(--text); outline: none; transition: border 0.2s ease, box-shadow 0.2s ease; }
+    input[type="text"]:focus { border-color: var(--accent-purple); box-shadow: 0 0 0 3px rgba(179,140,255,0.15); }
 
-    /* Section Groupings */
-    .blueprint-section {
-      margin-top: 32px;
-      background: rgba(0,0,0,0.15);
-      border: 1px solid var(--line);
-      border-radius: var(--radius-md);
-      padding: 20px;
-    }
-    .blueprint-section h3 {
-      font-size: 12px; text-transform: uppercase; letter-spacing: 0.15em;
-      color: var(--accent-gold); margin-bottom: 16px; font-weight: 700;
-    }
+    .blueprint-section { margin-top: 32px; background: rgba(0,0,0,0.15); border: 1px solid var(--line); border-radius: var(--radius-md); padding: 20px; }
+    .blueprint-section h3 { font-size: 12px; text-transform: uppercase; letter-spacing: 0.15em; color: var(--accent-gold); margin-bottom: 16px; font-weight: 700; display: flex; justify-content: space-between; align-items: center; }
 
-    /* Key Values */
     .kv-grid { display: grid; grid-template-columns: 1fr; gap: 16px; }
     @media (min-width: 600px) { .kv-grid { grid-template-columns: repeat(2, 1fr); } }
     
     .kv { display: flex; flex-direction: column; gap: 6px; }
-    .kv .k { color: var(--muted); font-size: 12px; }
-    .kv .v {
-      padding: 12px 16px; border-radius: 10px; background: rgba(255,255,255,0.02);
-      border: 1px solid var(--line); font-size: 14px; white-space: pre-wrap; line-height: 1.6;
-    }
+    .kv .k { color: var(--muted); font-size: 12px; display: flex; justify-content: space-between; align-items: center; }
+    .kv .v { padding: 12px 16px; border-radius: 10px; background: rgba(255,255,255,0.02); border: 1px solid var(--line); font-size: 14px; white-space: pre-wrap; line-height: 1.6; transition: border-color 0.3s ease, box-shadow 0.3s ease; }
+    .kv.locked .v { border-color: rgba(255, 211, 122, 0.4); box-shadow: 0 0 10px rgba(255, 211, 122, 0.05); background: rgba(255, 211, 122, 0.03); }
 
-    /* Structure Steps */
+    .lock-btn { background: none; border: none; font-size: 14px; cursor: pointer; padding: 4px; border-radius: 6px; opacity: 0.5; transition: all 0.2s ease; }
+    .lock-btn:hover { opacity: 1; background: rgba(255,255,255,0.1); }
+    .lock-btn.active { opacity: 1; text-shadow: 0 0 8px var(--accent-gold); }
+
     .structure-list { display: grid; gap: 12px; }
-    .step {
-      background: rgba(255,255,255,0.02); border: 1px solid var(--line);
-      border-radius: 10px; padding: 16px; transition: background 0.2s ease;
-    }
-    .step:hover { background: rgba(255,255,255,0.04); }
+    .step { background: rgba(255,255,255,0.02); border: 1px solid var(--line); border-radius: 10px; padding: 16px; }
     .step-hd { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px; flex-wrap: wrap; gap: 8px;}
     .step-name { font-weight: 700; color: var(--accent-purple); font-size: 14px; }
     .step-hint { font-size: 12px; color: var(--muted); background: rgba(0,0,0,0.3); padding: 4px 8px; border-radius: 6px; }
     .step-desc { font-size: 14px; color: var(--text); opacity: 0.9; }
+    .blueprint-section.locked .step { border-color: rgba(255, 211, 122, 0.3); }
 
-    /* Saved Items */
     .saved-list { display: grid; gap: 16px; }
-    .fav {
-      background: rgba(0,0,0,0.2); border: 1px solid var(--line);
-      border-radius: var(--radius-md); padding: 16px; transition: transform 0.2s ease;
-    }
+    .fav { background: rgba(0,0,0,0.2); border: 1px solid var(--line); border-radius: var(--radius-md); padding: 16px; transition: transform 0.2s ease; }
     .fav:hover { transform: translateY(-2px); border-color: rgba(255,255,255,0.15); }
     .fav-title { font-weight: 700; margin-bottom: 8px; font-size: 15px; }
     .fav-meta { display: flex; gap: 8px; flex-wrap: wrap; color: var(--muted); font-size: 12px; margin-bottom: 12px; }
     .fav-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 16px; }
 
-    /* Toast */
-    .toast {
-      position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(20px);
-      background: rgba(20, 22, 33, 0.9); border: 1px solid var(--accent-purple);
-      border-radius: 999px; padding: 12px 24px; box-shadow: 0 10px 30px rgba(179,140,255,0.2);
-      color: var(--text); font-size: 14px; font-weight: 600;
-      opacity: 0; pointer-events: none; transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-      z-index: 1000;
-    }
+    .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(20px); background: rgba(20, 22, 33, 0.9); border: 1px solid var(--accent-purple); border-radius: 999px; padding: 12px 24px; box-shadow: 0 10px 30px rgba(179,140,255,0.2); color: var(--text); font-size: 14px; font-weight: 600; opacity: 0; pointer-events: none; transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.16, 1, 0.3, 1); z-index: 1000; }
     .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
   </style>
 </head>
@@ -215,15 +123,18 @@
   <div id="root"></div>
 
   <script type="text/babel">
-    const { useState, useEffect, useRef } = React;
+    const { useState, useEffect } = React;
 
-    // --- DATA & RNG HELPERS ---
-    const GENRES = ["Pop", "Indie Pop", "Synthwave", "Hip-Hop", "Trap", "R&B", "Neo-Soul", "Country", "Alt-Country", "Folk", "Indie Folk", "Rock", "Alt Rock", "Dream Pop", "Shoegaze", "EDM", "House", "Techno", "Drum & Bass", "Metal", "Punk", "Emo", "Jazz", "Bossa Nova", "Reggae", "K-Pop", "Gospel", "Lo-fi", "Ambient", "Classical Crossover"];
+    // --- MASSIVE GENRE MEGA-STRING ---
+    // Contains hundreds of genres, sub-genres, global styles, and weird fusions to hit that massive scale.
+    const GENRE_STRING = "Pop,Indie Pop,Synthwave,Hip-Hop,Trap,R&B,Neo-Soul,Country,Alt-Country,Folk,Indie Folk,Rock,Alt Rock,Dream Pop,Shoegaze,EDM,House,Techno,Drum & Bass,Metal,Punk,Emo,Jazz,Bossa Nova,Reggae,K-Pop,Gospel,Lo-fi,Ambient,Classical Crossover,Hyperpop,Math Rock,Dark Cabaret,Vaporwave,Pirate Metal,Cinematic Orchestral,Spaghetti Western,Acid House,Acid Jazz,Afrobeat,Afropop,Amapiano,Ambient Dub,Art Pop,Art Rock,Avant-Garde Jazz,Baile Funk,Baroque Pop,Big Beat,Black Metal,Bluegrass,Boom Bap,Bossa Nova,Breakbeat,Britpop,Bubblegum Pop,C-Pop,Celtic Punk,Chamber Pop,Chiptune,City Pop,Cloud Rap,Coldwave,Contemporary R&B,Cumbia,Cyberpunk,Dancehall,Dark Ambient,Darkwave,Death Metal,Deep House,Delta Blues,Disco,Doom Metal,Downtempo,Drill,Drone,Dubstep,Electro Swing,Electroclash,Electronic Body Music,Emo Rap,Eurodance,Folk Rock,Folktronica,Free Jazz,Funk,Future Bass,Future Garage,G-Funk,Gabber,Garage Rock,Glitch,Glitch Hop,Goth Rock,Grime,Grunge,Hard Bop,Hardcore Punk,Hardstyle,Heavy Metal,Hyperpop,IDM,Indietronica,Industrial,Italo Disco,J-Pop,J-Rock,Jazz Fusion,Jungle,K-R&B,K-Hip Hop,Krautrock,Latin Pop,Lo-Fi Hip Hop,Math Pop,Melodic Death Metal,Microhouse,Minimal Techno,Motown,Moombahton,Neoclassical,Neo-Psychedelia,New Age,New Wave,No Wave,Noise Rock,Nu Metal,Nu-Disco,Outlaw Country,Phonk,Pop Punk,Post-Bop,Post-Britpop,Post-Hardcore,Post-Punk,Post-Rock,Power Metal,Progressive House,Progressive Metal,Progressive Rock,Psychedelic Rock,Psytrance,Ranchera,Reggaeton,Salsa,Samba,Screamo,Ska,Ska Punk,Sludge Metal,Smooth Jazz,Soft Rock,Soul,Space Rock,Speed Metal,Stoner Rock,Surf Rock,Swamp Pop,Symphonic Metal,Synth-Pop,Tech House,Thrash Metal,Trance,Trip Hop,Tropical House,UK Garage,Viking Metal,Witch House,Worldbeat,Yacht Rock,Zydeco,Acappella,Acoustic Blues,Arena Rock,Bhangra,Boombahton,Bulerias,Calypso,Chansons,Choral,Cowpunk,Crust Punk,Dance-Punk,Dark Synth,Deathcore,Dixieland,Doo-wop,Dream Trance,Electro,Flamenco,Folk Metal,Freestyle,Funeral Doom,Funk Metal,Gospel Choir,Gothic Metal,Grindcore,Groove Metal,Gypsy Jazz,Happy Hardcore,Honky Tonk,Horrorcore,Irish Folk,J-Core,Jazz Rap,Klezmer,Latin Jazz,Lounge,Makina,Mariachi,Mathcore,Merengue,Nerdcore,Norteno,Pagan Metal,Polka,Polka-Punk,Pop Rap,Psychobilly,Riot Grrrl,Rockabilly,Roots Reggae,Samba-Reggae,Schlager,Sean-nós,Shibuya-kei,Skate Punk,Skweee,Soca,Space Ambient,Speedcore,Steampunk,Symphonic Rock,Synthwave,Tango,Tejano,Trap Metal,Twee Pop,Vocal Jazz,Zouk";
+    const GENRES = GENRE_STRING.split(",");
+    
+    // --- STANDARD DATA ---
     const TOPICS = ["Leaving your hometown", "A love that never commits", "Rebuilding after failure", "A friendship fading quietly", "Wanting revenge but choosing peace", "Feeling out of place in your own life", "Missing someone you shouldn’t", "Starting over in secret", "Being addicted to the past", "Chasing a dream that’s changing you", "Talking to your younger self", "A night drive you don’t want to end", "Learning to forgive yourself", "Falling for the wrong person at the right time", "A promise you couldn’t keep", "Growing apart gracefully"];
     const EMOTIONS = ["Nostalgia", "Hope", "Resentment", "Longing", "Confidence", "Guilt", "Yearning", "Relief", "Regret", "Defiance", "Tenderness", "Jealousy", "Awe", "Grief", "Calm", "Restlessness"];
     const IMAGERY = ["Fading summer light", "Neon reflections on wet pavement", "Dusty photos in a drawer", "Cold air in an empty room", "A cigarette burning down unnoticed", "Motel curtains at sunrise", "Ocean salt on skin", "Train stations and missed calls", "Streetlights flickering", "Snow falling on quiet streets", "A cracked phone screen", "Warm kitchen lamplight"];
     const RHYME = ["Simple end rhymes, conversational diction", "Slant rhymes, modern phrasing, internal echoes", "Sparse rhymes, vivid imagery, punchy lines", "Dense internal rhymes, rhythmic wordplay", "No-rhyme free verse but with strong cadence", "Call-and-response phrasing, hook-forward repetition"];
-    
     const VOCAL_ARCHETYPES = [
       { name:"The Confessor", verse:"close-mic, intimate, restrained", chorus:"open tone, warm lift", bridge:"nearly spoken, vulnerable" },
       { name:"The Rebel", verse:"gritty, forward, rhythmic phrasing", chorus:"bigger edge, punch consonants", bridge:"half-sung grit, tension" },
@@ -231,7 +142,6 @@
       { name:"The Villain", verse:"low and controlled, theatrical", chorus:"dramatic lift, sharp dynamics", bridge:"cold whisper → sudden snap" },
       { name:"The Storyteller", verse:"clear articulation, narrative drive", chorus:"anthemic, singalong", bridge:"pause-heavy, honest delivery" }
     ];
-
     const STRUCTURES = [
       { name: "Modern Pop Arc", steps: [["Verse 1", "Scene setting", "Concrete details, one strong image per line."], ["Pre-Chorus", "Tension climb", "Shorten lines, raise urgency, hint the thesis."], ["Chorus", "Thesis + hook", "One clear statement, repeatable phrasing."], ["Verse 2", "Contrast / escalation", "Add a twist, reveal imbalance or regret."], ["Pre-Chorus", "Higher stakes", "Same shape, sharper confession."], ["Chorus", "Bigger payoff", "Add one new line at the end for lift."], ["Bridge", "Perspective flip", "Say one plain truth with no metaphor."], ["Final Chorus", "Expanded hook", "Stack harmonies, extend the last phrase."]] },
       { name: "Alt / Indie Narrative", steps: [["Verse 1", "Place + moment", "Anchor in time/location. Let details do the work."], ["Chorus", "Emotional summary", "Not too literal—one memorable phrase."], ["Verse 2", "Memory replay", "Show the same event from a new angle."], ["Chorus", "Reframe", "Same hook, changed meaning with one new word."], ["Bridge", "Confession", "Drop the ‘cool’—be embarrassingly honest once."], ["Final Chorus", "Resolution", "Either acceptance or refusal. No in-between."]] },
@@ -247,36 +157,28 @@
     function makeRng(seedStr){ const seed = seedStr && seedStr.trim() ? seedStr.trim() : String(Date.now()); const a = xmur3(seed)(); return { seed, rand: mulberry32(a) }; }
     function pick(rng, arr){ return arr[Math.floor(rng.rand() * arr.length)]; }
 
-    function generateData(seedInput, chaos) {
-      const { seed, rand } = makeRng(seedInput);
-      const rng = { seed, rand };
-
-      // Simplified logic wrappers for demo
-      const primaryFam = "pop"; 
-      const genres = { primary: pick(rng, GENRES), secondary: pick(rng, GENRES), primaryFam: "pop", secondaryFam: "electronic" };
-      const topic = pick(rng, TOPICS);
-      const emotion = { surface: pick(rng, EMOTIONS), core: pick(rng, EMOTIONS) };
-      const imagery = pick(rng, IMAGERY);
-      const rhyme = pick(rng, RHYME);
-      const vocal = pick(rng, VOCAL_ARCHETYPES);
-      const structure = pick(rng, STRUCTURES);
-      const hooks = [ `I keep ${imagery.toLowerCase()} like a secret...`, `If ${topic.toLowerCase()} was a song...`, `You called it ${emotion.surface.toLowerCase()}...`];
-      const music = `Tempo: 90-120 BPM\nKey: D Minor\nPalette: Warm bass, glossy synths, space`;
-
-      let mode = chaos <= 25 ? "Studio" : chaos <= 60 ? "Hybrid" : "Experimental";
-
-      return { seed, chaos, mode, createdAt: new Date().toISOString(), genres, topic, emotion, imagery, rhyme, vocal, structure, hooks, music };
-    }
-
     // --- COMPONENTS ---
-    const KeyValue = ({ label, value }) => (
-      <div className="kv">
-        <div className="k">{label}</div>
+    const LockButton = ({ isLocked, onToggle }) => (
+      <button 
+        className={`lock-btn ${isLocked ? 'active' : ''}`} 
+        onClick={onToggle}
+        title={isLocked ? "Unlock this element" : "Lock this element"}
+      >
+        {isLocked ? '🔒' : '🔓'}
+      </button>
+    );
+
+    const KeyValue = ({ label, value, lockKey, locks, toggleLock }) => (
+      <div className={`kv ${locks[lockKey] ? 'locked' : ''}`}>
+        <div className="k">
+          {label}
+          <LockButton isLocked={locks[lockKey]} onToggle={() => toggleLock(lockKey)} />
+        </div>
         <div className="v">{value}</div>
       </div>
     );
 
-    const BlueprintView = ({ bp }) => {
+    const BlueprintView = ({ bp, locks, toggleLock }) => {
       if (!bp) return <div className="card-bd"><p style={{color: 'var(--muted)'}}>No blueprint generated yet. Hit Generate!</p></div>;
 
       return (
@@ -284,31 +186,33 @@
           <div className="blueprint-section">
             <h3>🌌 The Vibe</h3>
             <div className="kv-grid">
-              <KeyValue label="Genres" value={`${bp.genres.primary} + ${bp.genres.secondary} (Flavor)`} />
-              <KeyValue label="Optional Musical Context" value={bp.music} />
+              <KeyValue label={`Genres (${GENRES.length} total possible!)`} value={`${bp.genres.primary} + ${bp.genres.secondary} (Flavor)`} lockKey="genres" locks={locks} toggleLock={toggleLock} />
+              <KeyValue label="Optional Musical Context" value={bp.music} lockKey="music" locks={locks} toggleLock={toggleLock} />
             </div>
           </div>
 
           <div className="blueprint-section">
             <h3>🫀 The Core</h3>
             <div className="kv-grid">
-              <KeyValue label="Topic" value={bp.topic} />
-              <KeyValue label="Emotion (Surface / Core)" value={`${bp.emotion.surface} / ${bp.emotion.core}`} />
-              <KeyValue label="Imagery Theme" value={bp.imagery} />
+              <KeyValue label="Topic" value={bp.topic} lockKey="topic" locks={locks} toggleLock={toggleLock} />
+              <KeyValue label="Emotion (Surface / Core)" value={`${bp.emotion.surface} / ${bp.emotion.core}`} lockKey="emotion" locks={locks} toggleLock={toggleLock} />
+              <KeyValue label="Imagery Theme" value={bp.imagery} lockKey="imagery" locks={locks} toggleLock={toggleLock} />
             </div>
           </div>
 
           <div className="blueprint-section">
             <h3>🗣️ The Voice</h3>
             <div className="kv-grid">
-              <KeyValue label="Rhyme & Diction" value={bp.rhyme} />
-              <KeyValue label="Vocal Direction" value={`${bp.vocal.name}\nVerse: ${bp.vocal.verse}\nChorus: ${bp.vocal.chorus}\nBridge: ${bp.vocal.bridge}`} />
-              <KeyValue label="Hook Starters" value={bp.hooks.map(h => `• ${h}`).join("\n")} />
+              <KeyValue label="Rhyme & Diction" value={bp.rhyme} lockKey="rhyme" locks={locks} toggleLock={toggleLock} />
+              <KeyValue label="Vocal Direction" value={`${bp.vocal.name}\nVerse: ${bp.vocal.verse}\nChorus: ${bp.vocal.chorus}\nBridge: ${bp.vocal.bridge}`} lockKey="vocal" locks={locks} toggleLock={toggleLock} />
             </div>
           </div>
 
-          <div className="blueprint-section">
-            <h3>🏗️ The Structure: {bp.structure.name}</h3>
+          <div className={`blueprint-section ${locks.structure ? 'locked' : ''}`}>
+            <h3>
+              🏗️ The Structure: {bp.structure.name}
+              <LockButton isLocked={locks.structure} onToggle={() => toggleLock('structure')} />
+            </h3>
             <div className="structure-list">
               {bp.structure.steps.map(([name, hint, desc], i) => (
                 <div key={i} className="step">
@@ -332,35 +236,64 @@
       const [saves, setSaves] = useState([]);
       const [toastMsg, setToastMsg] = useState({ text: "", visible: false });
 
-      // Load saves on mount
+      // NEW: State to track which elements are locked
+      const [locks, setLocks] = useState({
+        genres: false, music: false, topic: false, emotion: false, 
+        imagery: false, rhyme: false, vocal: false, structure: false
+      });
+
+      const toggleLock = (key) => {
+        setLocks(prev => ({ ...prev, [key]: !prev[key] }));
+      };
+
       useEffect(() => {
         try {
-          const loaded = JSON.parse(localStorage.getItem("lyricalchemy_saves_v2") || "[]");
+          const loaded = JSON.parse(localStorage.getItem("lyricalchemy_saves_v3") || "[]");
           setSaves(loaded);
         } catch (e) { console.error("Could not load saves", e); }
       }, []);
 
-      // Auto-generate on mount
-      useEffect(() => { handleGenerate(); }, []);
+      useEffect(() => { handleGenerate(true); }, []); // Initial boot
 
       const showToast = (msg) => {
         setToastMsg({ text: msg, visible: true });
         setTimeout(() => setToastMsg(prev => ({ ...prev, visible: false })), 2000);
       };
 
-      const handleGenerate = () => {
-        const bp = generateData(seedInput, chaos);
-        setCurrentBp(bp);
+      const handleGenerate = (isInitial = false) => {
+        const { seed, rand } = makeRng(seedInput);
+        const rng = { seed, rand };
+
+        // Helper to check if we should keep the current value
+        const shouldLock = (key) => !isInitial && currentBp && locks[key];
+
+        const newBp = {
+          seed,
+          chaos,
+          mode: chaos <= 25 ? "Studio" : chaos <= 60 ? "Hybrid" : "Experimental",
+          createdAt: new Date().toISOString(),
+          
+          genres: shouldLock('genres') ? currentBp.genres : { primary: pick(rng, GENRES), secondary: pick(rng, GENRES) },
+          topic: shouldLock('topic') ? currentBp.topic : pick(rng, TOPICS),
+          emotion: shouldLock('emotion') ? currentBp.emotion : { surface: pick(rng, EMOTIONS), core: pick(rng, EMOTIONS) },
+          imagery: shouldLock('imagery') ? currentBp.imagery : pick(rng, IMAGERY),
+          rhyme: shouldLock('rhyme') ? currentBp.rhyme : pick(rng, RHYME),
+          vocal: shouldLock('vocal') ? currentBp.vocal : pick(rng, VOCAL_ARCHETYPES),
+          structure: shouldLock('structure') ? currentBp.structure : pick(rng, STRUCTURES),
+          music: shouldLock('music') ? currentBp.music : `Tempo: ${pick(rng, [90, 105, 120, 140, 170])} BPM\nKey: ${pick(rng, ["C Minor", "G Major", "E Minor", "A Minor"])}\nPalette: Abstract, Textural, Reverb-heavy`
+        };
+
+        setCurrentBp(newBp);
       };
 
       const handleSave = () => {
         if (!currentBp) return showToast("Generate first! 🎲");
-        const exists = saves.some(s => s.seed === currentBp.seed && s.chaos === currentBp.chaos);
+        const exists = saves.some(s => s.seed === currentBp.seed && s.topic === currentBp.topic);
         if (exists) return showToast("Already saved! 😄");
         
         const newSaves = [currentBp, ...saves];
         setSaves(newSaves);
-        localStorage.setItem("lyricalchemy_saves_v2", JSON.stringify(newSaves));
+        localStorage.setItem("lyricalchemy_saves_v3", JSON.stringify(newSaves));
         showToast("Saved to Studio ✨");
       };
 
@@ -368,13 +301,13 @@
         const newSaves = [...saves];
         newSaves.splice(idx, 1);
         setSaves(newSaves);
-        localStorage.setItem("lyricalchemy_saves_v2", JSON.stringify(newSaves));
+        localStorage.setItem("lyricalchemy_saves_v3", JSON.stringify(newSaves));
         showToast("Deleted 🗑️");
       };
 
       const handleClearSaves = () => {
         setSaves([]);
-        localStorage.removeItem("lyricalchemy_saves_v2");
+        localStorage.removeItem("lyricalchemy_saves_v3");
         showToast("Cleared all saves 🗑️");
       };
 
@@ -402,7 +335,7 @@
           <header>
             <div className="brand">
               <h1>LyricAlchemy ✨</h1>
-              <p>Genre fusion + structure + emotion tension → a real songwriting blueprint</p>
+              <p>Lock your favorites, re-roll the rest. {GENRES.length} genres inside.</p>
             </div>
             <div className="pillrow">
               <div className="pill">Seed: <b>{currentBp ? currentBp.seed : "—"}</b></div>
@@ -411,12 +344,11 @@
           </header>
 
           <div className="grid">
-            {/* GENERATOR CARD */}
             <section className="glass-panel">
               <div className="card-hd">
                 <h2>Studio Generator</h2>
                 <div className="row">
-                  <button className="primary" onClick={handleGenerate}>🎲 Generate</button>
+                  <button className="primary" onClick={() => handleGenerate(false)}>🎲 Generate</button>
                   <button className="small" onClick={handleSave}>💾 Save</button>
                   <button className="small" onClick={handleExport}>📤 Export</button>
                 </div>
@@ -433,12 +365,14 @@
                     <input type="range" min="0" max="100" value={chaos} onChange={(e) => setChaos(Number(e.target.value))} />
                   </label>
                 </div>
+                <div style={{ marginTop: '16px', fontSize: '12px', color: 'var(--accent-gold)', display: 'flex', gap: '8px', alignItems: 'center' }}>
+                  <span>💡</span> <i>Click the 🔓 icons below to lock specific elements before generating!</i>
+                </div>
               </div>
 
-              <BlueprintView bp={currentBp} />
+              <BlueprintView bp={currentBp} locks={locks} toggleLock={toggleLock} />
             </section>
 
-            {/* SAVED CARD */}
             <aside className="glass-panel" style={{ alignSelf: 'start' }}>
               <div className="card-hd">
                 <h2>Saved Blueprints</h2>
