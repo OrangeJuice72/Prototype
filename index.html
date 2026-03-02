@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>LyricAlchemy — Custom Edit Edition</title>
+  <title>LyricAlchemy — The Mega-Drop Edition</title>
   
   <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
@@ -130,9 +130,15 @@
     const GENRE_STRING = "Pop,Indie Pop,Synthwave,Hip-Hop,Trap,R&B,Neo-Soul,Country,Alt-Country,Folk,Indie Folk,Rock,Alt Rock,Dream Pop,Shoegaze,EDM,House,Techno,Drum & Bass,Metal,Punk,Emo,Jazz,Bossa Nova,Reggae,K-Pop,Gospel,Lo-fi,Ambient,Classical Crossover,Hyperpop,Math Rock,Dark Cabaret,Vaporwave,Pirate Metal,Cinematic Orchestral,Spaghetti Western,Acid House,Acid Jazz,Afrobeat,Afropop,Amapiano,Ambient Dub,Art Pop,Art Rock,Avant-Garde Jazz,Baile Funk,Baroque Pop,Big Beat,Black Metal,Bluegrass,Boom Bap,Bossa Nova,Breakbeat,Britpop,Bubblegum Pop,C-Pop,Celtic Punk,Chamber Pop,Chiptune,City Pop,Cloud Rap,Coldwave,Contemporary R&B,Cumbia,Cyberpunk,Dancehall,Dark Ambient,Darkwave,Death Metal,Deep House,Delta Blues,Disco,Doom Metal,Downtempo,Drill,Drone,Dubstep,Electro Swing,Electroclash,Electronic Body Music,Emo Rap,Eurodance,Folk Rock,Folktronica,Free Jazz,Funk,Future Bass,Future Garage,G-Funk,Gabber,Garage Rock,Glitch,Glitch Hop,Goth Rock,Grime,Grunge,Hard Bop,Hardcore Punk,Hardstyle,Heavy Metal,Hyperpop,IDM,Indietronica,Industrial,Italo Disco,J-Pop,J-Rock,Jazz Fusion,Jungle,K-R&B,K-Hip Hop,Krautrock,Latin Pop,Lo-Fi Hip Hop,Math Pop,Melodic Death Metal,Microhouse,Minimal Techno,Motown,Moombahton,Neoclassical,Neo-Psychedelia,New Age,New Wave,No Wave,Noise Rock,Nu Metal,Nu-Disco,Outlaw Country,Phonk,Pop Punk,Post-Bop,Post-Britpop,Post-Hardcore,Post-Punk,Post-Rock,Power Metal,Progressive House,Progressive Metal,Progressive Rock,Psychedelic Rock,Psytrance,Ranchera,Reggaeton,Salsa,Samba,Screamo,Ska,Ska Punk,Sludge Metal,Smooth Jazz,Soft Rock,Soul,Space Rock,Speed Metal,Stoner Rock,Surf Rock,Swamp Pop,Symphonic Metal,Synth-Pop,Tech House,Thrash Metal,Trance,Trip Hop,Tropical House,UK Garage,Viking Metal,Witch House,Worldbeat,Yacht Rock,Zydeco";
     const GENRES = GENRE_STRING.split(",");
     
-    const TOPICS = ["Leaving your hometown", "A love that never commits", "Rebuilding after failure", "A friendship fading quietly", "Wanting revenge but choosing peace", "Feeling out of place in your own life", "Missing someone you shouldn’t", "Starting over in secret", "Being addicted to the past", "Chasing a dream that’s changing you", "Talking to your younger self", "A night drive you don’t want to end", "Learning to forgive yourself", "Falling for the wrong person at the right time", "A promise you couldn’t keep", "Growing apart gracefully"];
+    // 🔥 THE MEGA TOPICS LIST (100+ tropes)
+    const TOPIC_STRING = "Leaving your hometown without saying goodbye|A love that never commits but won't let go|Rebuilding your life after a public failure|A friendship fading quietly over text messages|Wanting revenge but choosing peace instead|Feeling out of place in your own childhood bedroom|Missing someone you know is terrible for you|Starting over in a city where nobody knows your name|Being addicted to the memory of how things were|Chasing a dream that’s slowly turning you bitter|Talking to your younger self in the mirror|A night drive with no destination just to avoid going home|Learning to forgive yourself for the things you broke|Falling for the wrong person at exactly the right time|A promise you made at 16 that you couldn't keep|Growing apart gracefully instead of fighting|Realizing your parents were just kids figuring it out too|The exact moment you fall out of love|Pretending you don't care when they walk into the room|Deleting their number but having it memorized|Finding their old t-shirt in your drawer and deciding to burn it|Realizing your hometown feels like a stranger|A toxic friendship you can't let go of|The terrifying freedom of finally quitting a job you hate|Watching someone else live the life you planned together|Feeling like an imposter in your own success|The paranoia of things going too well|Reconnecting with an ex only to remember why you left|Dressing up with nowhere to go just to feel alive|The guilt of moving on faster than you thought you would|A crush that's entirely built on eye contact and no words|Realizing the 'one that got away' was actually a bullet dodged|The comfort of being alone in a crowded diner at 2 AM|Choosing your ambition over your relationship|The awkwardness of bumping into someone you used to tell everything to|Holding onto a grudge because it's the only connection left|Falling in love with your best friend but being too scared to say it|The specific grief of a pet dying|Watching a parent get older and realizing time is running out|Feeling homesick for a place you've never been|The chaotic energy of a night out that goes completely off the rails|Regretting the text the second it says 'Read'|The intoxicating rush of a secret romance|Trying to fix someone who doesn't want to be fixed|The exhaustion of always being the 'strong' friend|Realizing you've become exactly like your mother|The bittersweet feeling of boxing up an apartment|A summer romance that you knew had an expiration date|The betrayal of your body failing you|Discovering a secret that changes your entire past|The slow realization that you are the villain in someone else's story|Apologizing when you know you aren't wrong just to keep the peace|The specific loneliness of New Year's Eve|Finding a love letter meant for someone else|The terrifying realization that you're an adult now|Staying in a relationship just because it's comfortable|The resentment of carrying the emotional load|A sudden epiphany on a boring Tuesday commute|The panic of realizing you forgot how to be single|Watching your friends hit milestones while you feel stuck|The strange intimacy of sharing a silence with a stranger|The guilt of surviving something others didn't|Falling for someone strictly because they pay attention to you|The relief of finally admitting you were wrong|The desperate attempt to recreate a perfect memory|Realizing the person you idolized is incredibly flawed|The exhaustion of keeping up a perfect online persona|The specific joy of canceling plans to stay in bed|A fleeting connection on public transit that you'll never forget|The quiet devastation of being uninvited|The awkward transition from lovers back to strangers|The fierce protectiveness over a younger sibling|The slow creep of apathy in a long-term relationship|The sudden urge to shave your head and change your name|The nostalgia for an era you didn't even live through|The brutal honesty of a drunken confession|The strange peace of hitting rock bottom|The manic energy of a caffeine-fueled all-nighter|The creeping realization that your dream job is a nightmare|The specific pain of being misunderstood by someone who claims to know you|The intoxicating power of finally setting a boundary|The lingering ghost of an unsaid goodbye|The terrifying vulnerability of asking for help|The strange camaraderie of the smoking section|The sudden, overwhelming appreciation for a simple sunny day|The dread of a Sunday evening|The hollow victory of winning an argument you shouldn't have started|The specific magic of the first snow of the year|The crushing weight of unfulfilled potential|The slow process of falling back in love with your partner|The disorientation of waking up in a hotel room and forgetting where you are|The specific brand of crazy that comes from sleep deprivation|The fierce, unspoken bond between outcasts|The sudden clarity that comes after a good cry|The bittersweet taste of a final paycheck|The eerie quiet of an empty school building|The specific anxiety of waiting for test results|The profound realization that nobody actually knows what they're doing|The quiet act of rebellion in doing absolutely nothing";
+    const TOPICS = TOPIC_STRING.split("|");
+
+    // 🔥 THE MEGA IMAGERY LIST (100+ sensory prompts)
+    const IMAGERY_STRING = "Neon flickering on a wet windshield|The smell of stale coffee and regret|Static on an old CRT television|Fading summer light cutting through dusty blinds|Dusty photos shoved in the back of a junk drawer|Cold air rushing into an empty, dark room|A cigarette burning down unnoticed in an ashtray|Motel curtains glowing orange at sunrise|Ocean salt drying tight on sunburned skin|Train stations echoing with missed calls and delays|Streetlights buzzing and flickering on a quiet suburban road|Snow falling silently on untouched pavement|A violently cracked phone screen glowing in the dark|Warm, yellow kitchen lamplight at 3 AM|Shattered glass glittering like diamonds on the asphalt|The heavy, oppressive humidity before a thunderstorm|A faded Polaroid curling at the edges|The distinct smell of old books and dried roses|A lone pair of sneakers dangling from a power line|The blinding glare of oncoming headlights|Mascara running down in jagged black rivers|The metallic taste of a split lip|A moth desperately battering against a porch light|The suffocating smell of cheap cologne and sweat|A chipped coffee mug leaving brown rings on a wooden table|The rhythmic, hypnotic thump of a distant bassline|A handful of melted ice cream dripping down a wrist|The blinding fluorescence of a 24-hour convenience store|A forgotten umbrella turning inside out in the wind|The sharp, clean scent of pine needles and frost|A crumpled handwritten note dissolving in a puddle|The eerie glow of a dashboard tracking a dark highway|A half-empty bottle of whiskey catching the afternoon sun|The chaotic tangle of charger cords on a nightstand|A lone red balloon trapped in a bare tree|The deafening roar of silence after a door slams|A perfectly applied swipe of red lipstick on a coffee cup|The rough texture of a brick wall against a scraped knuckle|A sky bruised with purple and bruised-yellow clouds|The jarring ring of an old rotary phone|A flickering fluorescent tube in a dingy restroom|The soft, rhythmic ticking of a grandfather clock in an empty house|A wilted bouquet of gas-station flowers|The stark contrast of dark blood on white snow|A dizzying kaleidoscope of stage lights cutting through fog|The specific hollow sound of a pebble hitting a window|A ripped concert ticket stub slowly fading in a wallet|The stinging slap of freezing rain on bare cheeks|A pile of unread mail gathering dust on the counter|The electric hum of a vending machine in a deserted hallway|The warm, suffocating smell of a crowded subway car|A single tear cutting a clean path through dirty cheeks|The blinding reflection of the sun off the ocean|A forgotten bicycle rusting in tall grass|The sharp crack of a pool ball breaking the silence|A constellation of freckles across a sunburnt nose|The heavy drag of a velvet curtain falling closed|A flickering candle casting long, monstrous shadows|The specific smell of chlorine and sunscreen on a summer afternoon|A tangled mess of cassette tape spilled on the floor|The stark white lines of a freshly painted crosswalk|A handful of loose change glinting on a bar top|The hollow, echoing thud of a dropped heartbeat|A swirling galaxy of dust motes in a shaft of sunlight|The sticky sweetness of spilled soda on a movie theater floor|The jagged edge of a torn photograph|A lone seagull crying over an empty winter beach|The blinding flash of a paparazzi camera|The soft, muffled crunch of footsteps in fresh snow|A discarded wedding ring sitting on a bathroom sink|The chaotic smear of city lights from a moving train|The specific scent of a freshly struck match|A worn-out leather jacket smelling of smoke and nostalgia|The dizzying blur of a spinning record|A single, perfect dewdrop trembling on a blade of grass|The harsh, abrasive scrape of a chair on a concrete floor|A forgotten doll sitting perfectly still on a dusty shelf|The blinding white of a blank page|The chaotic tangle of bedsheets after a restless night|A single, glowing ember in a dying fire|The specific sound of a key turning in a lock|A cracked rearview mirror showing a distorted past|The overwhelming smell of hospital antiseptic|A single, vibrant red leaf clinging to a bare branch|The dizzying spiral of a spiral staircase|A forgotten coffee cup balancing precariously on a railing|The sharp, sudden bite of winter wind|A swirling vortex of autumn leaves caught in an updraft|The blinding glare of a blank billboard|A lone pair of headlights cutting through thick fog|The specific sound of rain drumming on a tin roof|A forgotten scarf tied to a park bench|The harsh, mechanical buzz of an alarm clock|A single, perfect snowflake melting on an eyelash|The dizzying array of colors in a spilled oil slick|A forgotten love letter tucked into an old paperback|The sharp, distinct smell of freshly cut grass|A single, perfect tear dropping onto a keyboard|The chaotic jumble of thoughts in a crowded mind";
+    const IMAGERY = IMAGERY_STRING.split("|");
+
     const EMOTIONS = ["Nostalgia", "Hope", "Resentment", "Longing", "Confidence", "Guilt", "Yearning", "Relief", "Regret", "Defiance", "Tenderness", "Jealousy", "Awe", "Grief", "Calm", "Restlessness"];
-    const IMAGERY = ["Fading summer light", "Neon reflections on wet pavement", "Dusty photos in a drawer", "Cold air in an empty room", "A cigarette burning down unnoticed", "Motel curtains at sunrise", "Ocean salt on skin", "Train stations and missed calls", "Streetlights flickering", "Snow falling on quiet streets", "A cracked phone screen", "Warm kitchen lamplight"];
     const RHYME = ["Simple end rhymes, conversational diction", "Slant rhymes, modern phrasing, internal echoes", "Sparse rhymes, vivid imagery, punchy lines", "Dense internal rhymes, rhythmic wordplay", "No-rhyme free verse but with strong cadence", "Call-and-response phrasing, hook-forward repetition"];
     const VOCAL_ARCHETYPES = [
       { name:"The Confessor", verse:"close-mic, intimate, restrained", chorus:"open tone, warm lift", bridge:"nearly spoken, vulnerable" },
@@ -175,7 +181,6 @@
         }
       };
 
-      // 🛠️ FIX: Safe string splitting in case tempVal is empty
       const rows = (tempVal || "").split('\n').length || 1;
 
       return (
@@ -274,10 +279,9 @@
 
       useEffect(() => {
         try {
-          const loaded = JSON.parse(localStorage.getItem("lyricalchemy_saves_v6") || "[]");
+          const loaded = JSON.parse(localStorage.getItem("lyricalchemy_saves_v7") || "[]");
           setSaves(loaded);
         } catch (e) { console.error("Could not load saves", e); }
-        // Delaying generation slightly to ensure React is fully mounted
         setTimeout(() => handleGenerate(true), 10);
       }, []); 
 
@@ -287,7 +291,6 @@
 
         const shouldLock = (key) => !isInitial && currentBp && locks[key];
 
-        // 🛠️ FIX: Safe check for active overrides without optional chaining
         const activeOverrides = {};
         if (!isInitial && currentBp && currentBp.overrides) {
           Object.keys(currentBp.overrides).forEach(k => {
@@ -318,7 +321,7 @@
         if (!currentBp) return showToast("Generate first! 🎲");
         const newSaves = [currentBp, ...saves];
         setSaves(newSaves);
-        localStorage.setItem("lyricalchemy_saves_v6", JSON.stringify(newSaves));
+        localStorage.setItem("lyricalchemy_saves_v7", JSON.stringify(newSaves));
         showToast("Saved to Studio ✨");
       };
 
@@ -327,7 +330,6 @@
         showToast("Loaded blueprint 📥");
       };
 
-      // 🛠️ FIX: Safe deep value retrieval without optional chaining
       const getVal = (key, defaultVal) => {
         if (currentBp && currentBp.overrides && currentBp.overrides[key] !== undefined) {
           return currentBp.overrides[key];
@@ -340,7 +342,7 @@
           <header>
             <div className="brand">
               <h1>LyricAlchemy ✨</h1>
-              <p>Lock it, type over it, roll the rest. You have the controls.</p>
+              <p>Lock it, type over it, roll the rest. {TOPICS.length} Tropes & {IMAGERY.length} Imagery prompts loaded.</p>
             </div>
             <div className="pillrow">
               <div className="pill">Seed: <b>{currentBp ? currentBp.seed : "—"}</b></div>
@@ -419,7 +421,7 @@
             <aside className="glass-panel" style={{ alignSelf: 'start' }}>
               <div className="card-hd">
                 <h2>Saved Blueprints</h2>
-                {saves.length > 0 && <button className="small danger" onClick={() => { setSaves([]); localStorage.removeItem("lyricalchemy_saves_v6"); showToast("Cleared 🗑️"); }}>Clear</button>}
+                {saves.length > 0 && <button className="small danger" onClick={() => { setSaves([]); localStorage.removeItem("lyricalchemy_saves_v7"); showToast("Cleared 🗑️"); }}>Clear</button>}
               </div>
               <div className="card-bd">
                 {saves.length === 0 ? (
